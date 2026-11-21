@@ -63,9 +63,10 @@ function log(t){D.act.unshift(new Date().toLocaleString()+' — '+t);D.act=D.act
 const P=()=>D.projects.find(p=>p.id===D.cur);
 function go(v){view=v;$('#nav').innerHTML='<h1>Academic Research Studio</h1>'+V.map(x=>`<a class="${x==v?'on':''}" onclick="go('${x}')">${x}</a>`).join('');$('#m').innerHTML=R[v]();if(R[v+'_'])R[v+'_']()}
 async function ai(p){if(!D.set.key)throw Error('API key Gemini belum diisi (Settings). Fitur non-AI tetap berfungsi.');
-const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${D.set.model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':D.set.key},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});
-const j=await r.json();if(!r.ok)throw Error(j.error?.message||r.status);return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}
-const abs=i=>i?Object.entries(i).flatMap(([w,ps])=>ps.map(p=>[p,w])).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).join(' '):'';
+const ms=[D.set.model,'gemini-2.5-flash','gemini-2.5-flash-lite'].filter((m,i,a)=>m&&a.indexOf(m)==i);let err;
+for(const m of ms)for(let t=0;t<2;t++){try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':D.set.key},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});
+const j=await r.json();if(!r.ok)throw Error(j.error?.message||r.status);return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}catch(x){err=x;await new Promise(z=>setTimeout(z,1500))}}
+throw err}
 async function oa(q,f=''){const r=await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(q)}&per-page=10${f}`);if(!r.ok)throw Error('OpenAlex '+r.status);
 return(await r.json()).results.map(w=>({title:w.title,authors:(w.authorships||[]).map(a=>{const n=a.author.display_name.split(' ');return n.pop()+', '+n.join(' ')}),year:w.publication_year,journal:w.primary_location?.source?.display_name||'',publisher:w.primary_location?.source?.host_organization_name||'',doi:(w.doi||'').replace('https://doi.org/',''),oa:w.open_access?.is_oa,url:w.doi||w.primary_location?.landing_page_url||w.id,abs:abs(w.abstract_inverted_index),src:'OpenAlex'}))}
 async function cr(doi){const r=await fetch('https://api.crossref.org/works/'+encodeURIComponent(doi.trim().replace(/^https?:\/\/doi.org\//,'')));if(!r.ok)throw Error('DOI tidak ditemukan di Crossref ('+r.status+')');const m=(await r.json()).message;
