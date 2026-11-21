@@ -1,72 +1,79 @@
 <!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Academic Research Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:wght@500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-:root{--bg:#f2f4f8;--c:#fff;--t:#17202e;--m:#667085;--a:#2557b8;--ah:#1c4496;--b:#dde3ec;--side:#0f2238;--sidet:#aebdd1;--ok:#1a7f5a;--warn:#b7791f}
-@media(prefers-color-scheme:dark){:root{--bg:#0e131b;--c:#161d28;--t:#e6eaf1;--m:#93a0b4;--a:#6f9cf0;--ah:#8fb2f5;--b:#273140;--side:#0a1220}}
+:root{--bg:#f6f7f9;--c:#fff;--t:#111827;--m:#6b7280;--a:#0f766e;--ab:#e6f4f1;--b:#e5e7eb;--ink:#111827;--warn:#b45309}
+@media(prefers-color-scheme:dark){:root{--bg:#0b0f14;--c:#12181f;--t:#e8ecf1;--m:#8b97a7;--a:#4fd1c0;--ab:#12302d;--b:#222b36;--ink:#e8ecf1;--warn:#e0a458}}
 *{box-sizing:border-box}
-body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh;-webkit-font-smoothing:antialiased}
-nav{width:244px;background:var(--side);padding:22px 12px;position:sticky;top:0;height:100vh;overflow:auto;flex-shrink:0}
-nav h1{font:700 17px/1.25 Georgia,"Times New Roman",serif;margin:0 10px 22px;color:#fff;letter-spacing:.2px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.12)}
-nav a{display:block;padding:9px 12px;margin-bottom:2px;border-radius:8px;cursor:pointer;color:var(--sidet);font-weight:500;font-size:14px;border-left:3px solid transparent;transition:background .15s,color .15s}
-nav a:hover{background:rgba(255,255,255,.07);color:#fff}
-nav a.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:#7fb0ff}
-main{flex:1;padding:36px 40px 60px;max-width:1040px;min-width:0}
-h2{font:700 26px/1.25 Georgia,"Times New Roman",serif;margin:0 0 22px;letter-spacing:-.2px}
-.card{background:var(--c);border:1px solid var(--b);border-radius:10px;padding:20px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,32,56,.04)}
+body{margin:0;font:15px/1.6 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh;-webkit-font-smoothing:antialiased}
+nav{width:256px;background:var(--c);border-right:1px solid var(--b);padding:26px 14px;position:sticky;top:0;height:100vh;overflow:auto;flex-shrink:0}
+.brand{padding:0 12px 22px;margin-bottom:14px;border-bottom:1px solid var(--b)}
+.brand b{display:block;font:600 19px/1.2 Newsreader,Georgia,serif;letter-spacing:-.2px}
+.brand span{display:block;margin-top:6px;font-size:12px;color:var(--m)}
+nav a{display:block;padding:9px 12px;margin-bottom:2px;border-radius:8px;cursor:pointer;color:var(--m);font-weight:500;font-size:14px;transition:background .12s,color .12s}
+nav a:hover{background:var(--bg);color:var(--t)}
+nav a.on{background:var(--ab);color:var(--a);font-weight:600}
+main{flex:1;padding:44px 52px 72px;max-width:1040px;min-width:0}
+h2{font:600 32px/1.2 Newsreader,Georgia,serif;margin:0 0 26px;letter-spacing:-.4px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:22px;margin-bottom:16px}
 .card b{font-weight:600}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:14px}
-.g .card{margin:0;border-top:3px solid var(--a)}
-.n{font:700 34px/1.1 Georgia,serif;color:var(--t);margin-bottom:4px}
-label.m{display:block;margin-top:6px;font-weight:500}
-input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--b);border-radius:8px;background:var(--c);color:var(--t);font:inherit;margin:5px 0 12px;transition:border-color .15s,box-shadow .15s}
-input:focus,select:focus,textarea:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 22%,transparent)}
-textarea{min-height:190px;line-height:1.65;resize:vertical}
-input[type=file]{padding:9px;background:var(--bg)}
-button{background:var(--a);color:#fff;border:1px solid var(--a);padding:9px 16px;border-radius:8px;cursor:pointer;font:inherit;font-weight:600;font-size:14px;margin:3px 6px 3px 0;transition:background .15s}
-button:hover{background:var(--ah)}
-button.s{background:var(--c);color:var(--a);border-color:var(--b)}
-button.s:hover{background:var(--bg);border-color:var(--a)}
-button:focus-visible,a:focus-visible,nav a:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:16px}
+.g .card{margin:0;padding:20px;font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--m);font-weight:600}
+.g .n{font:600 36px/1.1 Newsreader,Georgia,serif;color:var(--t);margin-bottom:6px;text-transform:none;letter-spacing:-.5px}
+label.m{display:block;margin-top:8px;font-weight:500;color:var(--m)}
+input,select,textarea{width:100%;padding:11px 14px;border:1px solid var(--b);border-radius:10px;background:var(--c);color:var(--t);font:inherit;margin:6px 0 14px;transition:border-color .12s,box-shadow .12s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 20%,transparent)}
+textarea{min-height:190px;line-height:1.7;resize:vertical}
+input[type=file]{padding:10px;background:var(--bg)}
+button{background:var(--ink);color:var(--c);border:1px solid var(--ink);padding:10px 18px;border-radius:10px;cursor:pointer;font:inherit;font-weight:600;font-size:14px;margin:4px 8px 4px 0;transition:opacity .12s}
+button:hover{opacity:.88}
+button.s{background:transparent;color:var(--t);border-color:var(--b)}
+button.s:hover{background:var(--bg);opacity:1;border-color:var(--m)}
+button:focus-visible,a:focus-visible{outline:2px solid var(--a);outline-offset:2px}
 a{color:var(--a)}
 .m{color:var(--m);font-size:13px}
-.pre{white-space:pre-wrap;line-height:1.7}
-details{margin:8px 0}summary{cursor:pointer;font-weight:600;color:var(--a);padding:4px 0}
-progress{width:130px;height:8px;vertical-align:middle;accent-color:var(--a);margin:0 8px}
-table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
-th{background:var(--bg);font-weight:600}td,th{border:1px solid var(--b);padding:7px 10px;text-align:left}
-tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 55%,transparent)}
+.pre{white-space:pre-wrap;line-height:1.75}
+details{margin:10px 0}summary{cursor:pointer;font-weight:600;color:var(--a);padding:4px 0}
+progress{width:140px;height:6px;vertical-align:middle;accent-color:var(--a);margin:0 10px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:10px}
+th{background:var(--bg);font-weight:600;color:var(--m)}td,th{border:1px solid var(--b);padding:8px 12px;text-align:left}
 .w{overflow:auto}
-.warn{border-left:3px solid var(--warn);background:color-mix(in srgb,var(--warn) 9%,transparent);padding:10px 14px;border-radius:0 8px 8px 0;color:var(--t);font-size:13.5px}
+.warn{border-left:3px solid var(--warn);background:color-mix(in srgb,var(--warn) 8%,transparent);padding:11px 15px;border-radius:0 10px 10px 0;color:var(--t);font-size:13.5px}
 @media(max-width:800px){
 body{display:block}
-nav{width:auto;height:auto;position:sticky;top:0;z-index:5;display:flex;gap:4px;overflow-x:auto;padding:8px 10px;-webkit-overflow-scrolling:touch}
-nav h1{display:none}
-nav a{white-space:nowrap;margin:0;border-left:0;border-radius:999px;padding:7px 14px}
-nav a.on{background:#fff;color:var(--side)}
-main{padding:20px 16px 48px}
-h2{font-size:22px}
-.card{padding:16px}
+nav{width:auto;height:auto;position:sticky;top:0;z-index:5;display:flex;gap:6px;overflow-x:auto;padding:10px 12px;border-right:0;border-bottom:1px solid var(--b);-webkit-overflow-scrolling:touch}
+.brand{display:none}
+nav a{white-space:nowrap;margin:0;border-radius:999px;padding:7px 15px;border:1px solid var(--b)}
+nav a.on{border-color:transparent}
+main{padding:24px 16px 56px}
+h2{font-size:26px;margin-bottom:20px}
+.card{padding:18px}
 }
 </style></head><body>
 <nav id="nav"></nav><main id="m">Memuat…</main>
 <script>
 const V=['Dashboard','My Research','Start New Research','Idea & Title','Literature Search','Article Writer','Data Analyzer','Reference Manager','Journal Finder','Quality Checker','Settings'];
 const SEC=['Title','Abstract','Keywords','Introduction','Literature Review','Method','Results','Discussion','Conclusion','Acknowledgment'];
-let D={projects:[],refs:[],set:{model:'gemini-2.5-flash',key:'',style:'APA 7'},cur:null,act:[]},view='Dashboard',data=null;
+let D={projects:[],refs:[],set:{model:'',key:'',style:'APA 7'},cur:null,act:[]},view='Dashboard',data=null,MODELS=null;
 const $=s=>document.querySelector(s),e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const idb=()=>new Promise(r=>{const q=indexedDB.open('ars',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>r(q.result)});
 function load(){idb().then(d=>{const g=d.transaction('k').objectStore('k').get('d');g.onsuccess=()=>{if(g.result)D=Object.assign(D,g.result);go('Dashboard')}})}
 function save(){idb().then(d=>d.transaction('k','readwrite').objectStore('k').put(D,'d'))}
 function log(t){D.act.unshift(new Date().toLocaleString()+' — '+t);D.act=D.act.slice(0,15);save()}
 const P=()=>D.projects.find(p=>p.id===D.cur);
-function go(v){view=v;$('#nav').innerHTML='<h1>Academic Research Studio</h1>'+V.map(x=>`<a class="${x==v?'on':''}" onclick="go('${x}')">${x}</a>`).join('');$('#m').innerHTML=R[v]();if(R[v+'_'])R[v+'_']()}
+function go(v){view=v;$('#nav').innerHTML='<div class="brand"><b>Academic Research Studio</b><span>Workspace riset &amp; publikasi</span></div>'+V.map(x=>`<a class="${x==v?'on':''}" onclick="go('${x}')">${x}</a>`).join('');$('#m').innerHTML=R[v]();if(R[v+'_'])R[v+'_']()}
+const GB='https://generativelanguage.googleapis.com/v1beta/';
 async function ai(p){if(!D.set.key)throw Error('API key Gemini belum diisi (Settings). Fitur non-AI tetap berfungsi.');
-const ms=[D.set.model,'gemini-2.5-flash','gemini-2.5-flash-lite'].filter((m,i,a)=>m&&a.indexOf(m)==i);let err;
-for(const m of ms)for(let t=0;t<2;t++){try{const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':D.set.key},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});
-const j=await r.json();if(!r.ok)throw Error(j.error?.message||r.status);return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}catch(x){err=x;await new Promise(z=>setTimeout(z,1500))}}
+if(!MODELS){const r=await fetch(GB+'models?pageSize=200',{headers:{'x-goog-api-key':D.set.key}});const j=await r.json();if(!r.ok)throw Error('Key ditolak: '+(j.error?.message||r.status));
+MODELS=(j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/image|tts|live|audio|robotics|computer/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse()}
+const ms=[D.set.model,...MODELS].filter((m,i,a)=>m&&a.indexOf(m)==i).slice(0,4);let err=Error('Tidak ada model flash yang tersedia untuk key ini.');
+for(const m of ms)for(let t=0;t<2;t++){try{const r=await fetch(GB+'models/'+m+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':D.set.key},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});
+const j=await r.json();if(!r.ok)throw Error(m+': '+(j.error?.message||r.status));return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}catch(x){err=x;await new Promise(z=>setTimeout(z,1200))}}
 throw err}
+const abs=i=>i?Object.entries(i).flatMap(([w,ps])=>ps.map(p=>[p,w])).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).join(' '):'';
 async function oa(q,f=''){const r=await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(q)}&per-page=10${f}`);if(!r.ok)throw Error('OpenAlex '+r.status);
 return(await r.json()).results.map(w=>({title:w.title,authors:(w.authorships||[]).map(a=>{const n=a.author.display_name.split(' ');return n.pop()+', '+n.join(' ')}),year:w.publication_year,journal:w.primary_location?.source?.display_name||'',publisher:w.primary_location?.source?.host_organization_name||'',doi:(w.doi||'').replace('https://doi.org/',''),oa:w.open_access?.is_oa,url:w.doi||w.primary_location?.landing_page_url||w.id,abs:abs(w.abstract_inverted_index),src:'OpenAlex'}))}
 async function cr(doi){const r=await fetch('https://api.crossref.org/works/'+encodeURIComponent(doi.trim().replace(/^https?:\/\/doi.org\//,'')));if(!r.ok)throw Error('DOI tidak ditemukan di Crossref ('+r.status+')');const m=(await r.json()).message;
@@ -95,8 +102,8 @@ return out+'\n\n— Literatur terkait (OpenAlex) —\n'+w.map(r=>`• ${r.author
 const busy=s=>$('#out').innerHTML='<p class="m">'+s+'…</p>';
 const R={
 Dashboard(){const n=D.projects.length;return`<h2>Dashboard</h2><div class="g">${[['Proyek',n],['Draft aktif',D.projects.filter(p=>Object.values(p.sec||{}).some(Boolean)).length],['Referensi',D.refs.length],['Template',0]].map(x=>`<div class="card"><div class="n">${x[1]}</div>${x[0]}</div>`).join('')}</div>
-<div class="card"><b>Progres penelitian</b>${D.projects.map(p=>{const k=SEC.filter(s=>p.sec?.[s]).length;return`<div>${e(p.name)} <progress value="${k}" max="${SEC.length}"></progress> ${k}/${SEC.length}</div>`}).join('')||'<p class="m">Belum ada proyek.</p>'}</div>
-<div class="card"><b>Aktivitas terbaru</b><div class="m">${D.act.map(e).join('<br>')||'—'}</div></div>`},
+<div class="card"><b>Progres penelitian</b><div style="margin-top:10px">${D.projects.map(p=>{const k=SEC.filter(s=>p.sec?.[s]).length;return`<div>${e(p.name)} <progress value="${k}" max="${SEC.length}"></progress> <span class="m">${k}/${SEC.length}</span></div>`}).join('')||'<p class="m">Belum ada proyek.</p>'}</div></div>
+<div class="card"><b>Aktivitas terbaru</b><div class="m" style="margin-top:8px">${D.act.map(e).join('<br>')||'—'}</div></div>`},
 'My Research'(){return`<h2>My Research</h2><input placeholder="Cari proyek…" oninput="document.querySelectorAll('.pj').forEach(x=>x.hidden=!x.textContent.toLowerCase().includes(this.value.toLowerCase()))">
 ${D.projects.map((p,i)=>`<div class="card pj"><b>${e(p.name)}</b> <span class="m">(${p.mode}) ${D.cur==p.id?'• aktif':''}</span>
 <label class="m">Judul terpilih</label><input value="${e(p.title)}" onchange="D.projects[${i}].title=this.value;save()">
@@ -105,18 +112,18 @@ ${D.projects.map((p,i)=>`<div class="card pj"><b>${e(p.name)}</b> <span class="m
 <button onclick="D.cur='${p.id}';save();go('Article Writer')">Buka Writer</button><button class="s" onclick="D.cur='${p.id}';save();go('My Research')">Jadikan aktif</button><button class="s" onclick="if(confirm('Hapus?')){D.projects.splice(${i},1);save();go('My Research')}">Hapus</button></div>`).join('')||'<p class="m">Belum ada proyek. Mulai dari Start New Research.</p>'}`},
 'Start New Research'(){return`<h2>Start New Research</h2><div class="card"><label class="m">Nama proyek</label><input id="pn">
 <label class="m">Titik awal</label><select id="md" onchange="$('#fl').hidden=this.value!='data'"><option value="eval">1. I Already Have a Research Title</option><option value="topic">2. I Have a Research Topic</option><option value="ideas">3. I Need Research Ideas (isi bidang/lokasi/minat)</option><option value="data">4. I Have Research Data (CSV/XLSX)</option></select>
-<textarea id="in" style="min-height:80px" placeholder="Judul / topik / bidang ilmu + lokasi + minat"></textarea><input id="fl" type="file" accept=".csv,.xlsx,.xls" hidden>
+<textarea id="in" style="min-height:90px" placeholder="Judul / topik / bidang ilmu + lokasi + minat"></textarea><input id="fl" type="file" accept=".csv,.xlsx,.xls" hidden>
 <button onclick="startP()">Mulai</button></div><div id="out" class="card pre" hidden></div>`},
 async 'Idea & Title_'(){},
 'Idea & Title'(){return`<h2>Idea & Title</h2><div class="card"><select id="k"><option value="ideas">Cari ide penelitian</option><option value="topic">Generate judul dari topik</option><option value="eval">Evaluasi judul</option></select>
-<textarea id="in" style="min-height:80px" placeholder="Bidang ilmu, lokasi, minat, target publikasi / topik / judul"></textarea><button onclick="busy('Menelusuri literatur & AI');run($('#k').value,$('#in').value).then(t=>{window.last=t;$('#out').innerHTML='<div class=pre>'+e(t)+'</div>'})">Jalankan</button></div><div id="out" class="card"></div>`},
+<textarea id="in" style="min-height:90px" placeholder="Bidang ilmu, lokasi, minat, target publikasi / topik / judul"></textarea><button onclick="busy('Menelusuri literatur & AI');run($('#k').value,$('#in').value).then(t=>{window.last=t;$('#out').innerHTML='<div class=pre>'+e(t)+'</div>'})">Jalankan</button></div><div id="out" class="card"></div>`},
 'Literature Search'(){return`<h2>Literature Search</h2><div class="card"><input id="q" placeholder="Keyword, judul, penulis (Indonesia/Inggris) atau DOI">
 <div class="g"><input id="y1" placeholder="Tahun dari"><input id="y2" placeholder="Tahun sampai"><select id="oa"><option value="">Semua akses</option><option value="1">Open access saja</option></select></div>
 <button onclick="srch()">Cari</button><button class="s" onclick="doi()">Ambil metadata DOI</button><button class="s" onclick="kw()">Kembangkan keyword (AI)</button></div><div id="out"></div>`},
 'Article Writer'(){const p=P();if(!p)return'<h2>Article Writer</h2><p>Pilih proyek aktif di My Research atau buat proyek baru.</p>';p.sec=p.sec||{};
 return`<h2>Article Writer — ${e(p.name)}</h2><div class="card"><select id="sc" onchange="ws()">${SEC.map(s=>`<option>${s}</option>`).join('')}</select>
-<textarea id="tx" style="min-height:320px" oninput="P().sec[$('#sc').value]=this.value;save();$('#wc').textContent=this.value.trim().split(/\\s+/).filter(Boolean).length"></textarea><div class="m">Kata: <span id="wc">0</span> • autosave aktif</div>
-<select id="md"><option>Draft</option><option>Academic Revision</option><option>Deep Revision</option><option>Critical Review</option><option>Journal-Ready Editing</option></select>
+<textarea id="tx" style="min-height:340px" oninput="P().sec[$('#sc').value]=this.value;save();$('#wc').textContent=this.value.trim().split(/\\s+/).filter(Boolean).length"></textarea><div class="m">Kata: <span id="wc">0</span> • autosave aktif</div>
+<select id="md" style="margin-top:12px"><option>Draft</option><option>Academic Revision</option><option>Deep Revision</option><option>Critical Review</option><option>Journal-Ready Editing</option></select>
 <button onclick="wa('w')">Tulis/Revisi (AI)</button><button class="s" onclick="wa('en')">Terjemah ke English</button><button class="s" onclick="wa('id')">Terjemah ke Indonesia</button><button class="s" onclick="wa('c')">Kritik</button>
 <button class="s" onclick="ver()">Simpan versi</button><button class="s" onclick="rest()">Riwayat versi</button><button onclick="expD()">Export DOCX</button></div><div id="out" class="card pre" hidden></div>`},
 'Article Writer_'(){ws()},
@@ -125,12 +132,12 @@ return`<h2>Article Writer — ${e(p.name)}</h2><div class="card"><select id="sc"
 <input id="d" placeholder="DOI untuk import"><button onclick="imp()">Import DOI</button><button class="s" onclick="ris()">Import RIS/BibTeX…</button><input type="file" id="rf" hidden onchange="rimp(this.files[0])">
 <button class="s" onclick="dl('refs.ris',toRIS())">Export RIS</button><button class="s" onclick="dl('refs.bib',toBib())">Export BibTeX</button><button class="s" onclick="dl('refs.csv',toCSV(),'text/csv')">Export CSV</button><button class="s" onclick="dl('biblio.txt',D.refs.map(r=>fmt(r)).sort().join('\\n\\n'))">Bibliografi</button></div>
 <div id="out">${D.refs.map((r,i)=>`<div class="card">${e(fmt(r))}<br><button class="s" onclick="D.refs.splice(${i},1);save();go(view)">Hapus</button></div>`).join('')||'<p class="m">Belum ada referensi.</p>'}</div>`},
-'Journal Finder'(){return`<h2>Journal Finder</h2><div class="card"><textarea style="min-height:90px" id="q" placeholder="Judul / abstrak / bidang"></textarea><button onclick="jf()">Cari jurnal (OpenAlex)</button>
-<p class="warn">Indeksasi (Scopus/SINTA), biaya, dan reputasi TIDAK diverifikasi di sini. Periksa situs resmi jurnal, Scopus Sources, SINTA, DOAJ; waspadai jurnal predator.</p></div><div id="out"></div>`},
+'Journal Finder'(){return`<h2>Journal Finder</h2><div class="card"><textarea style="min-height:100px" id="q" placeholder="Judul / abstrak / bidang"></textarea><button onclick="jf()">Cari jurnal (OpenAlex)</button>
+<p class="warn" style="margin-top:14px">Indeksasi (Scopus/SINTA), biaya, dan reputasi TIDAK diverifikasi di sini. Periksa situs resmi jurnal, Scopus Sources, SINTA, DOAJ; waspadai jurnal predator.</p></div><div id="out"></div>`},
 'Quality Checker'(){const p=P();return`<h2>Quality Checker</h2><div class="card"><p class="m">Pemeriksaan heuristik (struktur, sitasi vs daftar pustaka). Bukan jaminan lolos peer review, plagiarisme, atau detektor AI.</p><button onclick="qc()">Periksa proyek aktif ${p?'('+e(p.name)+')':''}</button><button class="s" onclick="qa()">Telaah kritis (AI)</button></div><div id="out" class="card pre"></div>`},
 Settings(){return`<h2>Settings</h2><div class="card"><label class="m">Provider</label><select><option>Google Gemini (free tier, kuota terbatas)</option></select>
-<label class="m">Model</label><input value="${e(D.set.model)}" onchange="D.set.model=this.value;save()"><label class="m">API key (disimpan hanya di browser ini)</label><input type="password" value="${e(D.set.key)}" onchange="D.set.key=this.value;save()">
-<button onclick="ai('Balas hanya: OK').then(t=>$('#st').textContent='Terhubung: '+t).catch(x=>$('#st').textContent='Gagal: '+x.message)">Tes koneksi</button><div id="st" class="m"></div></div>
+<label class="m">Model (kosongkan agar dipilih otomatis)</label><input value="${e(D.set.model)}" onchange="D.set.model=this.value.trim();save()"><label class="m">API key (disimpan hanya di browser ini)</label><input type="password" value="${e(D.set.key)}" onchange="D.set.key=this.value.trim();MODELS=null;save()">
+<button onclick="$('#st').textContent='Menguji…';ai('Balas hanya: OK').then(t=>$('#st').textContent='Terhubung: '+t).catch(x=>$('#st').textContent='Gagal: '+x.message)">Tes koneksi</button><div id="st" class="m"></div></div>
 <div class="card"><b>Backup</b><br><button onclick="dl('ars-backup.json',JSON.stringify(D),'application/json')">Export JSON</button><button class="s" onclick="$('#bf').click()">Import JSON</button><input id="bf" type="file" hidden onchange="bi(this.files[0])"></div>`},
 'Data Analyzer_':0};
 async function startP(){const m=$('#md').value;let inp=$('#in').value,ex='';$('#out').hidden=false;busy('Memproses');
