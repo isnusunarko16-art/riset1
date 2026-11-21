@@ -16,120 +16,132 @@ h2{font:600 26px Newsreader,Georgia,serif;margin:0 0 16px;letter-spacing:-.3px}
 label{display:block;font-size:13px;font-weight:500;color:var(--m);margin-top:6px}
 input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--b);border-radius:10px;background:var(--c);color:var(--t);font:inherit;margin:5px 0 12px}
 input:focus,select:focus,textarea:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 20%,transparent)}
-textarea.sm{min-height:90px}textarea.paper{min-height:380px;font:17px/1.8 Newsreader,Georgia,serif;padding:18px}
+textarea.sm{min-height:80px}textarea.paper{min-height:380px;font:17px/1.8 Newsreader,Georgia,serif;padding:18px}
 button{background:var(--t);color:var(--c);border:1px solid var(--t);padding:9px 16px;border-radius:10px;cursor:pointer;font:inherit;font-weight:600;font-size:14px;margin:3px 6px 3px 0}
 button.s{background:transparent;color:var(--t);border-color:var(--b)}button.p{background:var(--a);border-color:var(--a);color:#fff}
 .m{color:var(--m);font-size:13px}.pre{white-space:pre-wrap;line-height:1.75}.err{color:var(--er)}
 .hint{background:var(--ab);border-radius:10px;padding:10px 14px;font-size:13.5px;margin-bottom:12px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:1;min-width:130px}
-.ol{padding:8px 4px;border-bottom:1px solid var(--b);cursor:pointer;display:flex;justify-content:space-between}
-.ol:last-child{border:0}.ok{color:var(--a);font-weight:600}
-progress{width:100%;height:6px;accent-color:var(--a)}
+.ol{padding:8px 4px;border-bottom:1px solid var(--b);cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.ol:last-child{border:0}.ok{color:var(--a);font-weight:600}progress{width:100%;height:6px;accent-color:var(--a)}
 </style></head><body><div id="app"></div>
 <script>
 const SK=[
-['abstrak','Abstrak','Bagian Awal','Ringkasan 150–250 kata: latar, tujuan, metode, hasil, simpulan. Tulis paling akhir.'],
-['kunci','Kata Kunci','Bagian Awal','3–5 kata kunci dipisah koma.'],
-['latar','Latar Belakang','BAB I PENDAHULUAN','Fenomena, data awal, masalah, alasan penting diteliti, kesenjangan penelitian.'],
-['rumusan','Rumusan Masalah','BAB I PENDAHULUAN','Pertanyaan penelitian, konsisten dengan judul.'],
-['tujuan','Tujuan Penelitian','BAB I PENDAHULUAN','Satu tujuan untuk tiap rumusan masalah.'],
-['manfaat','Manfaat Penelitian','BAB I PENDAHULUAN','Manfaat teoretis dan praktis.'],
-['batasan','Batasan Masalah','BAB I PENDAHULUAN','Ruang lingkup objek, waktu, dan variabel.'],
-['teori','Landasan Teori','BAB II TINJAUAN PUSTAKA','Teori dan konsep utama sesuai fokus/variabel, dengan sitasi.'],
-['terdahulu','Penelitian Terdahulu','BAB II TINJAUAN PUSTAKA','Sintesis penelitian relevan: persamaan, perbedaan, hasil.'],
-['kerangka','Kerangka Pemikiran','BAB II TINJAUAN PUSTAKA','Alur hubungan antar konsep/variabel.'],
-['hipotesis','Hipotesis','BAB II TINJAUAN PUSTAKA','Kuantitatif: H1, H2 dst. dengan dasar teori. Kosongkan bila kualitatif.'],
-['jenis','Jenis dan Pendekatan Penelitian','BAB III METODE PENELITIAN','Jenis penelitian dan alasannya.'],
-['subjek','Populasi dan Sampel / Subjek Penelitian','BAB III METODE PENELITIAN','Populasi, teknik sampling, jumlah sampel / informan.'],
-['data','Teknik Pengumpulan Data','BAB III METODE PENELITIAN','Kuesioner, wawancara, observasi, dokumentasi.'],
-['variabel','Variabel dan Definisi Operasional','BAB III METODE PENELITIAN','Variabel, indikator, skala pengukuran.'],
-['analisis','Teknik Analisis Data','BAB III METODE PENELITIAN','Uji dan alat analisis yang dipakai.'],
-['umum','Gambaran Umum Objek Penelitian','BAB IV HASIL DAN PEMBAHASAN','Profil singkat objek penelitian.'],
-['hasil','Hasil Penelitian','BAB IV HASIL DAN PEMBAHASAN','Butuh data asli Anda: tempel angka/temuan di kotak poin.',1],
-['bahas','Pembahasan','BAB IV HASIL DAN PEMBAHASAN','Tafsirkan temuan, kaitkan dengan teori dan penelitian terdahulu.',1],
-['simpulan','Kesimpulan','BAB V PENUTUP','Jawaban atas rumusan masalah, sesuai temuan.'],
-['saran','Saran','BAB V PENUTUP','Saran praktis dan untuk penelitian berikutnya.']];
+['abstrak','Abstrak','Bagian Awal','Ringkasan 150–250 kata: latar, tujuan, metode, hasil, simpulan.',200],
+['kunci','Kata Kunci','Bagian Awal','3–5 kata kunci dipisah koma.',10],
+['latar','Latar Belakang','BAB I PENDAHULUAN','Fenomena, masalah, alasan penting diteliti, kesenjangan penelitian.',500],
+['rumusan','Rumusan Masalah','BAB I PENDAHULUAN','Pertanyaan penelitian, konsisten dengan judul.',120],
+['tujuan','Tujuan Penelitian','BAB I PENDAHULUAN','Satu tujuan untuk tiap rumusan masalah.',120],
+['manfaat','Manfaat Penelitian','BAB I PENDAHULUAN','Manfaat teoretis dan praktis.',150],
+['batasan','Batasan Masalah','BAB I PENDAHULUAN','Ruang lingkup objek, waktu, variabel.',100],
+['teori','Landasan Teori','BAB II TINJAUAN PUSTAKA','Teori dan konsep utama dengan sitasi.',600],
+['terdahulu','Penelitian Terdahulu','BAB II TINJAUAN PUSTAKA','Sintesis penelitian relevan: persamaan, perbedaan, hasil.',500],
+['kerangka','Kerangka Pemikiran','BAB II TINJAUAN PUSTAKA','Alur hubungan antar konsep/variabel.',200],
+['hipotesis','Hipotesis','BAB II TINJAUAN PUSTAKA','Kuantitatif: H1, H2 dengan dasar teori. Untuk kualitatif tulis bahwa penelitian tidak menggunakan hipotesis.',200],
+['jenis','Jenis dan Pendekatan Penelitian','BAB III METODE PENELITIAN','Jenis penelitian dan alasannya.',200],
+['subjek','Populasi dan Sampel / Subjek Penelitian','BAB III METODE PENELITIAN','Populasi, teknik sampling, jumlah sampel/informan.',200],
+['data','Teknik Pengumpulan Data','BAB III METODE PENELITIAN','Kuesioner, wawancara, observasi, dokumentasi.',200],
+['variabel','Variabel dan Definisi Operasional','BAB III METODE PENELITIAN','Variabel, indikator, skala pengukuran.',250],
+['analisis','Teknik Analisis Data','BAB III METODE PENELITIAN','Uji dan alat analisis yang dipakai.',250],
+['umum','Gambaran Umum Objek Penelitian','BAB IV HASIL DAN PEMBAHASAN','Profil singkat objek penelitian.',200],
+['hasil','Hasil Penelitian','BAB IV HASIL DAN PEMBAHASAN','Kerangka penyajian hasil. Angka/temuan asli Anda yang mengisinya.',300],
+['bahas','Pembahasan','BAB IV HASIL DAN PEMBAHASAN','Tafsirkan temuan, kaitkan dengan teori dan penelitian terdahulu.',400],
+['simpulan','Kesimpulan','BAB V PENUTUP','Jawaban atas rumusan masalah.',200],
+['saran','Saran','BAB V PENUTUP','Saran praktis dan untuk penelitian berikutnya.',150]];
 const AR=[
-['abstrak','Abstrak','Artikel','150–250 kata. Tulis paling akhir.'],
-['kunci','Kata Kunci','Artikel','3–5 kata kunci dipisah koma.'],
-['pend','Pendahuluan','Artikel','Latar, kesenjangan penelitian, tujuan, kontribusi.'],
-['tinjauan','Tinjauan Pustaka','Artikel','Teori dan penelitian terdahulu, dengan sitasi.'],
-['metode','Metode','Artikel','Desain, data, sampel, teknik analisis.'],
-['hasil','Hasil','Artikel','Butuh data asli Anda: tempel angka/temuan di kotak poin.',1],
-['bahas','Pembahasan','Artikel','Tafsirkan temuan dan kaitkan dengan literatur.',1],
-['simpulan','Kesimpulan','Artikel','Temuan utama, implikasi, keterbatasan, saran.'],
-['terima','Ucapan Terima Kasih','Artikel','Opsional.']];
+['abstrak','Abstrak','Artikel','150–250 kata.',200],['kunci','Kata Kunci','Artikel','3–5 kata kunci dipisah koma.',10],
+['pend','Pendahuluan','Artikel','Latar, kesenjangan penelitian, tujuan, kontribusi.',500],
+['tinjauan','Tinjauan Pustaka','Artikel','Teori dan penelitian terdahulu, dengan sitasi.',600],
+['metode','Metode','Artikel','Desain, data, sampel, teknik analisis.',350],
+['hasil','Hasil','Artikel','Kerangka penyajian hasil. Angka/temuan asli Anda yang mengisinya.',300],
+['bahas','Pembahasan','Artikel','Tafsirkan temuan dan kaitkan dengan literatur.',400],
+['simpulan','Kesimpulan','Artikel','Temuan utama, implikasi, keterbatasan, saran.',200]];
 const secs=d=>d.type=='skripsi'?SK:AR;
-let D={docs:[],set:{key:'',model:''},cur:null,tab:'docs'},MODELS=null,RS=[];
+let D={docs:[],set:{key:'',model:''},cur:null,tab:'start'},MODELS=null,TT=[],RS=[],BUSY=false;
 const $=s=>document.querySelector(s),e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const cd=()=>D.docs.find(d=>d.id===D.cur),wc=t=>(t||'').trim().split(/\s+/).filter(Boolean).length;
-const idb=()=>new Promise(r=>{const q=indexedDB.open('ars2',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>r(q.result)});
-function load(){idb().then(d=>{const g=d.transaction('k').objectStore('k').get('d');g.onsuccess=()=>{if(g.result)D=Object.assign(D,g.result);if(!D.docs.length)D.tab='docs';draw()}})}
+const cd=()=>D.docs.find(d=>d.id===D.cur),wc=t=>(t||'').trim().split(/\s+/).filter(Boolean).length,sl=ms=>new Promise(r=>setTimeout(r,ms));
+const idb=()=>new Promise(r=>{const q=indexedDB.open('ars3',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>r(q.result)});
+function load(){idb().then(d=>{const g=d.transaction('k').objectStore('k').get('d');g.onsuccess=()=>{if(g.result)D=Object.assign(D,g.result);draw()}})}
 function save(){idb().then(d=>d.transaction('k','readwrite').objectStore('k').put(D,'d'))}
 const dl=(n,t,m='text/plain')=>{const x=document.createElement('a');x.href=URL.createObjectURL(t instanceof Blob?t:new Blob([t],{type:m}));x.download=n;x.click()};
 function go(t){D.tab=t;draw()}
-function draw(){const tabs=[['docs','Dokumen'],['write','Susun'],['refs','Referensi'],['export','Ekspor'],['set','Setelan']];
-$('#app').innerHTML=`<header><div class="in"><div class="br"><b>Academic Research Studio</b><span>Penyusun skripsi &amp; artikel ilmiah</span></div><div class="tabs">${tabs.map(t=>`<a class="${t[0]==D.tab?'on':''}" onclick="go('${t[0]}')">${t[1]}</a>`).join('')}</div></div></header><main>${V[D.tab]()}</main>`}
+function draw(){const tabs=[['start','Mulai'],['write','Susun'],['refs','Referensi'],['export','Ekspor'],['set','Setelan']];
+$('#app').innerHTML=`<header><div class="in"><div class="br"><b>Academic Research Studio</b><span>Penyusun skripsi &amp; artikel ilmiah otomatis</span></div><div class="tabs">${tabs.map(t=>`<a class="${t[0]==D.tab?'on':''}" onclick="go('${t[0]}')">${t[1]}</a>`).join('')}</div></div></header><main>${V[D.tab]()}</main>`}
 const GB='https://generativelanguage.googleapis.com/v1beta/';
 async function ai(p){if(!D.set.key)throw Error('API key Gemini belum diisi (tab Setelan).');
 if(!MODELS){const r=await fetch(GB+'models?pageSize=200',{headers:{'x-goog-api-key':D.set.key}});const j=await r.json();if(!r.ok)throw Error('Key ditolak: '+(j.error?.message||r.status));
 MODELS=(j.models||[]).filter(m=>(m.supportedGenerationMethods||[]).includes('generateContent')&&/flash/.test(m.name)&&!/image|tts|live|audio|robotics|computer/.test(m.name)).map(m=>m.name.replace('models/','')).sort().reverse()}
 const ms=[D.set.model,...MODELS].filter((m,i,a)=>m&&a.indexOf(m)==i).slice(0,4);let err=Error('Tidak ada model flash yang tersedia untuk key ini.');
 for(const m of ms)for(let t=0;t<2;t++){try{const r=await fetch(GB+'models/'+m+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':D.set.key},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});
-const j=await r.json();if(!r.ok)throw Error(m+': '+(j.error?.message||r.status));return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}catch(x){err=x;await new Promise(z=>setTimeout(z,1200))}}
+const j=await r.json();if(!r.ok)throw Error(m+': '+(j.error?.message||r.status));return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}catch(x){err=x;await sl(1500)}}
 throw err}
-const RULE='ATURAN WAJIB: tulis prosa akademik tanpa markdown, heading, atau poin. Jangan mengarang data, angka, hasil, responden, atau referensi. Sitasi hanya dalam format (Penulis, tahun) yang ada di daftar referensi; jika klaim butuh sumber tetapi tidak ada di daftar, tulis [PERLU REFERENSI]. Jaga konsistensi dengan judul dan bagian lain.';
-function prompt(d,k,task){const L=secs(d);return`${RULE}\nBahasa: ${d.lang}.\nJenis: ${d.type}. Judul: ${d.title}. Bidang: ${d.field||'-'}. Pendekatan: ${d.method}.\n\nBagian lain yang sudah ada:\n${L.filter(x=>x[0]!=k&&d.sec[x[0]]).map(x=>x[1]+': '+d.sec[x[0]].slice(0,300)).join('\n')||'-'}\n\nReferensi tersedia:\n${d.refs.slice(0,20).map(r=>cite(r)+' '+r.title+(r.abs?' | '+r.abs.slice(0,300):'')).join('\n')||'(belum ada)'}\n\nTUGAS:\n${task}`}
+const js=t=>JSON.parse((t.match(/[\[{][\s\S]*[\]}]/)||[''])[0]);
+const abs=i=>i?Object.entries(i).flatMap(([w,ps])=>ps.map(p=>[p,w])).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).join(' '):'';
+async function oa(q,n=8){const r=await fetch('https://api.openalex.org/works?filter=has_abstract:true&per-page='+n+'&search='+encodeURIComponent(q));if(!r.ok)throw Error('OpenAlex '+r.status);
+return(await r.json()).results.filter(w=>w.title&&(w.authorships||[]).length).map(w=>({title:w.title,authors:w.authorships.slice(0,6).map(a=>{const n=a.author.display_name.split(' ');return n.pop()+', '+n.join(' ')}),year:w.publication_year,journal:w.primary_location?.source?.display_name||'',doi:(w.doi||'').replace('https://doi.org/',''),abs:abs(w.abstract_inverted_index)}))}
 const ini2=g=>(g||'').split(/[\s.]+/).filter(Boolean).map(x=>x[0].toUpperCase()+'.').join(' ');
-function cite(r){const n=(r.authors||[]).map(x=>x.split(', ')[0]);const a=!n.length?r.title.split(' ')[0]:n.length==1?n[0]:n.length==2?n[0]+' & '+n[1]:n[0]+' et al.';return`(${a}, ${r.year||'t.t.'})`}
+function cin(r){const n=(r.authors||[]).map(x=>x.split(', ')[0]);const a=!n.length?r.title.split(' ')[0]:n.length==1?n[0]:n.length==2?n[0]+' & '+n[1]:n[0]+' et al.';return`${a}, ${r.year||'t.t.'}`}
+const cite=r=>`(${cin(r)})`;
 function auth(r){const a=(r.authors||[]).map(x=>{const[f,g]=x.split(', ');return g?f+', '+ini2(g):f});if(!a.length)return r.title.split(' ').slice(0,3).join(' ');return a.length==1?a[0]:a.slice(0,-1).join(', ')+', & '+a[a.length-1]}
 function refParts(r){const j=r.journal?[[r.journal+(r.vol?', '+r.vol:'')+(r.pages?', '+r.pages:''),1],['. ',0]]:[];const l=r.doi?'https://doi.org/'+r.doi:(r.url||'');return[[`${auth(r)} (${r.year||'t.t.'}). ${r.title}. `,0],...j,[l,0]]}
-const refTxt=r=>refParts(r).map(x=>x[0]).join('');
-const empty=t=>`<div class="card"><p>${t}</p><button class="p" onclick="go('docs')">Ke Dokumen</button></div>`;
+const refTxt=r=>refParts(r).map(x=>x[0]).join(''),RX=d=>d.refs.filter(r=>r.used!==false);
+function conv(d,t){return t.replace(/\*\*|^#+\s*/gm,'').replace(/\[R\s*([\d\s,;R]+)\]/g,(m,s)=>{const ids=[...new Set([...s.matchAll(/\d+/g)].map(x=>+x[0]-1))].filter(i=>d.refs[i]);if(!ids.length)return'';ids.forEach(i=>d.refs[i].used=true);return'('+ids.map(i=>cin(d.refs[i])).join('; ')+')'})}
+const RULE=`ATURAN WAJIB: tulis prosa akademik tanpa markdown, heading, atau poin. Sitasi HANYA dengan menulis kode [R#] sesuai nomor di daftar referensi (contoh: [R3] atau [R3][R7]); tulis klaim hanya jika didukung abstrak referensi tersebut dan jangan mengutip kode di luar daftar. Jangan mengarang referensi, angka statistik, data, hasil, nama responden/objek, atau jumlah sampel. Untuk fakta, angka, nama, atau hasil yang tidak diberikan pengguna, tulis penanda [ISI: deskripsi singkat apa yang perlu diisi]. Jaga konsistensi dengan judul dan bagian lain.`;
+function prompt(d,k,task){const L=secs(d);return`${RULE}\nBahasa: ${d.lang}.\nJenis: ${d.type}. Judul: ${d.title}. Bidang: ${d.field||'-'}. Pendekatan: ${d.method}.\n\nBagian lain yang sudah ada:\n${L.filter(x=>x[0]!=k&&d.sec[x[0]]).map(x=>x[1]+': '+d.sec[x[0]].slice(0,250)).join('\n')||'-'}\n\nDaftar referensi (nyata, dari OpenAlex):\n${d.refs.slice(0,30).map((r,i)=>`[R${i+1}] ${auth(r)} (${r.year}). ${r.title}. ${r.journal}${r.abs?' | Abstrak: '+r.abs.slice(0,350):''}`).join('\n')||'(belum ada — jangan menulis sitasi)'}\n\nTUGAS:\n${task}`}
+function taskOf(d,x){const nt=d.notes[x[0]]||'';if(x[0]=='abstrak')return`Tulis abstrak ${x[4]} kata dari seluruh bagian yang ada. Jangan memuat angka hasil yang tidak ada; gunakan [ISI: ...] untuk hasil utama bila belum ada.`;
+if(x[0]=='kunci')return'Tulis 4–5 kata kunci, dipisah koma, tanpa penjelasan.';
+return`Tulis bagian "${x[1]}" (${x[3]}) sekitar ${x[4]} kata. Pengguna memberi dasar:\n${nt||'(tidak ada, susun dari judul dan referensi)'}`}
+function empty(t){return`<div class="card"><p>${t}</p><button class="p" onclick="go('start')">Ke Mulai</button></div>`}
 const V={
-docs(){return`<h2>Dokumen</h2>${D.docs.map((d,i)=>{const L=secs(d),k=L.filter(x=>d.sec[x[0]]).length;return`<div class="card"><b>${e(d.title)}</b><div class="m">${d.type=='skripsi'?'Skripsi':'Artikel Jurnal'} • ${k}/${L.length} bagian • ${D.cur==d.id?'aktif':''}</div><progress value="${k}" max="${L.length}"></progress><div style="margin-top:8px"><button class="p" onclick="D.cur='${d.id}';save();go('write')">Buka</button><button class="s" onclick="if(confirm('Hapus dokumen ini?')){D.docs.splice(${i},1);if(D.cur=='${d.id}')D.cur=null;save();draw()}">Hapus</button></div></div>`}).join('')}
-<div class="card"><b>Dokumen baru</b><label>Jenis</label><select id="ty"><option value="skripsi">Skripsi (BAB I–V)</option><option value="artikel">Artikel Jurnal</option></select>
-<label>Judul</label><textarea id="ti" class="sm"></textarea><label>Bidang / program studi</label><input id="fi"><div class="row"><div><label>Pendekatan</label><select id="me"><option>Kuantitatif</option><option>Kualitatif</option><option>Campuran</option><option>Studi pustaka</option></select></div><div><label>Bahasa</label><select id="lg"><option>Indonesia</option><option>English</option></select></div></div>
-<label>Nama penulis (untuk cover)</label><input id="au"><label>Institusi / program studi (untuk cover)</label><input id="in"><button class="p" onclick="mk()">Buat dokumen</button></div>`},
+start(){return`<h2>Mulai</h2><div class="hint">Isi data di bawah. Aplikasi mencari judul, literatur nyata, lalu menyusun draft lengkap dengan sitasi otomatis. Bagian Hasil dan data lapangan ditandai <b>[ISI: …]</b> untuk Anda lengkapi, karena data tidak boleh dikarang.</div>
+<div class="card"><div class="row"><div><label>Jenis</label><select id="ty"><option value="skripsi">Skripsi (BAB I–V)</option><option value="artikel">Artikel Jurnal</option></select></div><div><label>Pendekatan</label><select id="me"><option>Kuantitatif</option><option>Kualitatif</option><option>Campuran</option><option>Studi pustaka</option></select></div><div><label>Bahasa</label><select id="lg"><option>Indonesia</option><option>English</option></select></div></div>
+<label>Bidang / program studi</label><input id="fi" placeholder="Contoh: Manajemen, Pariwisata, Keperawatan">
+<label>Sudah punya judul? Tulis di sini</label><textarea id="ti" class="sm"></textarea>
+<label>Belum punya judul? Tulis topik / minat / lokasi (boleh kosong)</label><textarea id="tp" class="sm" placeholder="Contoh: media sosial dan keputusan menginap hotel di Semarang"></textarea>
+<div class="row"><div><label>Nama penulis (cover)</label><input id="au"></div><div><label>Institusi / prodi (cover)</label><input id="in"></div></div>
+<button class="p" onclick="startDoc()">Buat draft lengkap otomatis</button><button class="s" onclick="findTitles()">Carikan judul dulu</button><div id="tt"></div></div>
+${D.docs.map((d,i)=>{const L=secs(d),k=L.filter(x=>d.sec[x[0]]).length;return`<div class="card"><b>${e(d.title)}</b><div class="m">${d.type=='skripsi'?'Skripsi':'Artikel'} • ${k}/${L.length} bagian • ${d.refs.length} referensi</div><progress value="${k}" max="${L.length}"></progress><div style="margin-top:8px"><button class="p" onclick="D.cur='${d.id}';save();go('write')">Buka</button><button class="s" onclick="if(confirm('Hapus?')){D.docs.splice(${i},1);if(D.cur=='${d.id}')D.cur=null;save();draw()}">Hapus</button></div></div>`}).join('')}`},
 write(){const d=cd();if(!d)return empty('Buat atau pilih dokumen dulu.');const L=secs(d),k=d.sel&&L.find(x=>x[0]==d.sel)?d.sel:L[0][0];d.sel=k;const s=L.find(x=>x[0]==k),gs=[...new Set(L.map(x=>x[2]))],tot=L.reduce((a,x)=>a+wc(d.sec[x[0]]),0);
-return`<h2>${e(d.title)}</h2><div class="m" style="margin:-8px 0 14px">${tot} kata • autosave aktif</div>
+return`<h2>${e(d.title)}</h2><div class="m" style="margin:-8px 0 14px">${tot} kata • ${d.refs.length} referensi ditemukan • autosave aktif</div><div id="bp" class="hint">${BUSY?'Sedang bekerja…':'Draft otomatis siap diperiksa. Ganti isi atau tulis ulang bagian mana pun.'}</div>
 <div class="card"><label>Bagian</label><select onchange="cd().sel=this.value;save();draw()">${gs.map(g=>`<optgroup label="${g}">${L.filter(x=>x[2]==g).map(x=>`<option value="${x[0]}" ${x[0]==k?'selected':''}>${d.sec[x[0]]?'✓ ':''}${x[1]}</option>`).join('')}</optgroup>`).join('')}</select>
 <div class="hint"><b>${s[1]}</b> — ${s[3]}</div>
-<label>Poin, data, atau ide Anda untuk bagian ini (dasar tulisan AI)</label><textarea class="sm" oninput="cd().notes[cd().sel]=this.value;save()" placeholder="Contoh: fenomena, angka, hasil olah data, temuan wawancara…">${e(d.notes[k]||'')}</textarea>
-<div class="row"><div><select id="ln"><option value="150">Pendek (±150 kata)</option><option value="300" selected>Sedang (±300 kata)</option><option value="600">Panjang (±600 kata)</option></select></div><div><button class="p" style="width:100%" onclick="act('tulis')">Tulis dengan AI</button></div></div></div>
-<div class="card"><textarea id="tx" class="paper" oninput="cd().sec[cd().sel]=this.value;save()" placeholder="Tulis di sini atau gunakan AI…">${e(d.sec[k]||'')}</textarea>
+<label>Data / poin Anda untuk bagian ini (angka hasil olah data, temuan wawancara, dll.)</label><textarea class="sm" oninput="cd().notes[cd().sel]=this.value;save()">${e(d.notes[k]||'')}</textarea>
+<button class="p" onclick="act('tulis')">Tulis ulang bagian ini (AI)</button></div>
+<div class="card"><textarea id="tx" class="paper" oninput="cd().sec[cd().sel]=this.value;save()">${e(d.sec[k]||'')}</textarea>
 <div class="row"><button class="s" onclick="act('revisi')">Revisi</button><button class="s" onclick="act('panjang')">Kembangkan</button><button class="s" onclick="act('para')">Parafrase</button>${d.prev&&d.prev[k]!==undefined?'<button class="s" onclick="undo()">Urungkan</button>':''}</div>
-<div class="row" style="margin-top:6px">${d.refs.length?`<select id="cs">${d.refs.map((r,i)=>`<option value="${i}">${e(cite(r))} ${e(r.title.slice(0,40))}</option>`).join('')}</select><button class="s" onclick="ic()">Sisipkan sitasi</button>`:'<span class="m">Tambah referensi di tab Referensi untuk menyisipkan sitasi.</span>'}</div>
-<div class="row" style="margin-top:6px"><button class="s" onclick="nav(-1)">← Sebelumnya</button><button class="s" onclick="nav(1)">Berikutnya →</button></div></div>
-<div id="res"></div>
-<div class="card"><b>Daftar isi &amp; progres</b><div id="dp" class="m"></div>${L.map(x=>`<div class="ol" onclick="cd().sel='${x[0]}';save();draw();scrollTo(0,0)"><span class="${d.sec[x[0]]?'ok':''}">${d.sec[x[0]]?'✓':'○'} ${x[1]}</span><span class="m">${wc(d.sec[x[0]])||''}</span></div>`).join('')}<button class="p" style="margin-top:10px" onclick="draftAll()">Draft semua bagian kosong (AI)</button><div class="m">Hasil dan Pembahasan hanya ditulis jika Anda mengisi poin/data-nya.</div></div>`},
+<div class="row" style="margin-top:6px"><button class="s" onclick="nav(-1)">← Sebelumnya</button><button class="s" onclick="nav(1)">Berikutnya →</button></div></div><div id="res"></div>
+<div class="card"><b>Progres</b>${L.map(x=>`<div class="ol" onclick="cd().sel='${x[0]}';save();draw();scrollTo(0,0)"><span class="${d.sec[x[0]]?'ok':''}">${d.sec[x[0]]?'✓':'○'} ${x[1]}</span><span class="m">${wc(d.sec[x[0]])||''}</span></div>`).join('')}
+<button class="p" style="margin-top:10px" onclick="autoBuild()">Lanjutkan draft otomatis (isi bagian kosong)</button></div>`},
 refs(){const d=cd();if(!d)return empty('Buat atau pilih dokumen dulu.');return`<h2>Referensi</h2>
-<div class="card"><b>Cari literatur (OpenAlex)</b><input id="q" placeholder="Kata kunci atau judul"><button class="p" onclick="srch()">Cari</button><div id="rs"></div></div>
+<div class="card"><b>Cari tambahan (OpenAlex)</b><input id="q" placeholder="Kata kunci"><button class="p" onclick="srch()">Cari</button><div id="rs"></div></div>
 <div class="card"><b>Impor DOI</b><input id="doi" placeholder="10.xxxx/xxxxx"><button onclick="impDoi()">Impor</button></div>
-<div class="card"><b>Tambah manual (buku, laporan, dll.)</b><label>Penulis (satu per baris: Belakang, Depan)</label><textarea id="ma" class="sm"></textarea><div class="row"><input id="my" placeholder="Tahun"><input id="mj" placeholder="Jurnal / penerbit"></div><input id="mt" placeholder="Judul"><input id="ml" placeholder="DOI atau URL (opsional)"><button onclick="addMan()">Simpan</button></div>
-<div class="card"><b>Daftar pustaka (APA 7) — ${d.refs.length}</b>${d.refs.slice().sort((a,b)=>refTxt(a).localeCompare(refTxt(b))).map(r=>`<div class="ol"><span>${e(refTxt(r))}</span><button class="s" onclick="delRef(${d.refs.indexOf(r)})">Hapus</button></div>`).join('')||'<p class="m">Belum ada referensi.</p>'}</div>`},
-export(){const d=cd();if(!d)return empty('Buat atau pilih dokumen dulu.');const L=secs(d),miss=L.filter(x=>!d.sec[x[0]]&&x[0]!='terima'&&x[0]!='hipotesis').map(x=>x[1]);
-return`<h2>Ekspor</h2><div class="card"><b>${e(d.title)}</b><div class="m">Total ${L.reduce((a,x)=>a+wc(d.sec[x[0]]),0)} kata • ${d.refs.length} referensi</div>${miss.length?`<p class="m">Bagian masih kosong: ${e(miss.join(', '))}</p>`:''}
+<div class="card"><b>Tambah manual</b><label>Penulis (satu per baris: Belakang, Depan)</label><textarea id="ma" class="sm"></textarea><div class="row"><input id="my" placeholder="Tahun"><input id="mj" placeholder="Jurnal / penerbit"></div><input id="mt" placeholder="Judul"><input id="ml" placeholder="DOI atau URL (opsional)"><button onclick="addMan()">Simpan</button></div>
+<div class="card"><b>Daftar pustaka APA 7 — ${RX(d).length} dipakai dari ${d.refs.length} ditemukan</b><p class="m">Hanya referensi yang benar-benar disitasi masuk ke daftar pustaka ekspor.</p>${d.refs.map((r,i)=>({r,i})).sort((a,b)=>refTxt(a.r).localeCompare(refTxt(b.r))).map(({r,i})=>`<div class="ol"><span>${r.used!==false?'<b class="ok">✓</b> ':'○ '}${e(refTxt(r))}</span><button class="s" onclick="delRef(${i})">Hapus</button></div>`).join('')||'<p class="m">Belum ada.</p>'}</div>`},
+export(){const d=cd();if(!d)return empty('Buat atau pilih dokumen dulu.');const L=secs(d),miss=L.filter(x=>!d.sec[x[0]]).map(x=>x[1]);const ph=L.map(x=>[x[1],(d.sec[x[0]]||'').match(/\[ISI[^\]]*\]/g)||[]]).filter(x=>x[1].length);
+return`<h2>Ekspor</h2><div class="card"><b>${e(d.title)}</b><div class="m">${L.reduce((a,x)=>a+wc(d.sec[x[0]]),0)} kata • ${RX(d).length} referensi disitasi</div>${miss.length?`<p class="m">Bagian kosong: ${e(miss.join(', '))}</p>`:''}
+${ph.length?`<div class="hint"><b>${ph.reduce((a,x)=>a+x[1].length,0)} penanda [ISI] perlu Anda lengkapi dengan data asli</b> (ditandai kuning di DOCX): ${e(ph.map(x=>x[0]+' ('+x[1].length+')').join(', '))}</div>`:''}
 <button class="p" onclick="expD()">Unduh DOCX</button><button class="s" onclick="copyAll()">Salin seluruh teks</button><button class="s" onclick="dl('backup.json',JSON.stringify(D),'application/json')">Backup JSON</button><button class="s" onclick="$('#bf').click()">Impor backup</button><input id="bf" type="file" hidden onchange="bi(this.files[0])"><div id="ex" class="m"></div>
-<p class="m">DOCX memakai A4, Times New Roman 12, ${d.type=='skripsi'?'spasi 1,5, margin 4-3-3-3 cm':'margin 2,54 cm'}. Sesuaikan dengan pedoman kampus/jurnal Anda sebelum dikirim.</p></div>`},
-set(){return`<h2>Setelan</h2><div class="card"><label>API key Gemini (tersimpan hanya di browser ini)</label><input type="password" value="${e(D.set.key)}" onchange="D.set.key=this.value.trim();MODELS=null;save()"><label>Model (kosongkan agar dipilih otomatis)</label><input value="${e(D.set.model)}" onchange="D.set.model=this.value.trim();save()">
-<button class="p" onclick="$('#st').textContent='Menguji…';ai('Balas hanya: OK').then(t=>$('#st').textContent='Terhubung: '+t).catch(x=>$('#st').textContent='Gagal: '+x.message)">Tes koneksi</button><div id="st" class="m"></div><p class="m">Tanpa API key, penulisan manual, referensi, dan ekspor tetap berfungsi. Ambil key gratis di aistudio.google.com/apikey.</p></div>`}};
-function mk(){const f=i=>$('#'+i).value.trim();if(!f('ti'))return alert('Isi judul dulu.');const d={id:'d'+Date.now(),type:f('ty'),title:f('ti'),field:f('fi'),method:f('me'),lang:f('lg'),author:f('au'),inst:f('in'),sec:{},notes:{},refs:[],sel:null};D.docs.push(d);D.cur=d.id;save();go('write')}
+<p class="m">DOCX: A4, Times New Roman 12, ${d.type=='skripsi'?'spasi 1,5, margin 4-3-3-3 cm, cover, nomor halaman':'margin 2,54 cm'}. Sesuaikan dengan pedoman kampus/jurnal sebelum dikirim.</p></div>`},
+set(){return`<h2>Setelan</h2><div class="card"><label>API key Gemini (tersimpan hanya di browser ini)</label><input type="password" value="${e(D.set.key)}" onchange="D.set.key=this.value.trim();MODELS=null;save()"><label>Model (kosongkan agar otomatis)</label><input value="${e(D.set.model)}" onchange="D.set.model=this.value.trim();save()">
+<button class="p" onclick="$('#st').textContent='Menguji…';ai('Balas hanya: OK').then(t=>$('#st').textContent='Terhubung: '+t).catch(x=>$('#st').textContent='Gagal: '+x.message)">Tes koneksi</button><div id="st" class="m"></div></div>`}};
+async function findTitles(){const f=i=>$('#'+i).value.trim(),q=f('tp')||f('ti')||f('fi');if(!q)return alert('Isi topik, minat, atau bidang dulu.');$('#tt').innerHTML='<p class="m">Menelusuri literatur dan menyusun judul…</p>';
+try{let w=[];try{w=await oa(q,10)}catch(x){}const o=js(await ai(`Balas HANYA JSON array 5 objek {"judul","alasan","gap","metode"} (bahasa ${f('lg')||'Indonesia'}). Usulkan judul ${f('ty')} yang spesifik, layak diteliti, dan berlandaskan literatur berikut. Topik/minat: ${q}. Bidang: ${f('fi')||'-'}. Pendekatan: ${f('me')}. "gap" = potensi kesenjangan (bukan klaim pasti novelty).\nLiteratur nyata:\n${w.map(r=>`- ${cin(r)} ${r.title}`).join('\n')}`));TT=o;
+$('#tt').innerHTML=o.map((t,i)=>`<div class="card"><b>${e(t.judul)}</b><div class="m">${e(t.alasan)}<br>Potensi gap: ${e(t.gap)}<br>Metode: ${e(t.metode)}</div><button class="p" onclick="$('#ti').value=TT[${i}].judul;startDoc()">Pakai &amp; buat draft</button><button class="s" onclick="$('#ti').value=TT[${i}].judul;scrollTo(0,0)">Pakai saja</button></div>`).join('')}catch(x){$('#tt').innerHTML='<p class="err">'+e(x.message)+'</p>'}}
+async function startDoc(){const f=i=>$('#'+i).value.trim();if(!f('ti'))return alert('Isi judul, atau ketuk "Carikan judul dulu".');
+const d={id:'d'+Date.now(),type:f('ty'),title:f('ti'),field:f('fi'),method:f('me'),lang:f('lg'),author:f('au'),inst:f('in'),sec:{},notes:{},refs:[],sel:null};D.docs.push(d);D.cur=d.id;D.tab='write';save();draw();autoBuild()}
+async function autoBuild(){const d=cd();if(BUSY)return;BUSY=true;const st=t=>{const b=$('#bp');if(b)b.textContent=t};
+try{if(!d.refs.some(r=>r.auto)){st('Menyusun kata kunci pencarian…');const qs=js(await ai(`Balas HANYA JSON array berisi 6 query pencarian literatur akademik (3 bahasa Inggris, 3 bahasa Indonesia, 2-5 kata, tanpa tanda kutip) untuk penelitian: ${d.title}. Bidang: ${d.field||'-'}.`));
+const seen=new Set(d.refs.map(r=>r.title.toLowerCase()));for(const [i,q] of qs.entries()){st(`Mencari literatur nyata (${i+1}/${qs.length}): ${q}`);try{for(const r of await oa(q,8)){if(seen.has(r.title.toLowerCase())||d.refs.length>=30)continue;seen.add(r.title.toLowerCase());r.auto=true;r.used=false;d.refs.push(r)}}catch(x){}await sl(300)}save()}
+const end=k=>k=='abstrak'||k=='kunci',todo=secs(d).filter(x=>!d.sec[x[0]]).sort((a,b)=>end(a[0])-end(b[0]));
+for(const [i,x] of todo.entries()){st(`Menulis ${i+1}/${todo.length}: ${x[1]}…`);d.sec[x[0]]=conv(d,(await ai(prompt(d,x[0],taskOf(d,x)))).trim());save();await sl(700)}
+BUSY=false;draw();const b=$('#bp');if(b)b.textContent='Selesai. Periksa tiap bagian, lengkapi penanda [ISI], lalu ekspor.'}catch(x){BUSY=false;draw();const b=$('#bp');if(b){b.textContent='Berhenti: '+x.message+' — tekan "Lanjutkan draft otomatis" untuk melanjutkan.';b.classList.add('err')}}}
 function nav(n){const d=cd(),L=secs(d),i=L.findIndex(x=>x[0]==d.sel)+n;if(i<0||i>=L.length)return;d.sel=L[i][0];save();draw();scrollTo(0,0)}
-function ic(){const d=cd(),ta=$('#tx'),c=cite(d.refs[$('#cs').value]),p=ta.selectionStart??ta.value.length;ta.value=ta.value.slice(0,p)+c+ta.value.slice(p);d.sec[d.sel]=ta.value;save()}
-async function act(kind){const d=cd(),k=d.sel,s=secs(d).find(x=>x[0]==k),tx=d.sec[k]||'',nt=d.notes[k]||'',ln=$('#ln').value;
-if(kind!='tulis'&&!tx.trim())return alert('Bagian ini masih kosong.');$('#res').innerHTML='<p class="m">AI bekerja…</p>';
-const task={tulis:`Tulis bagian "${s[1]}" (${s[3]}) sekitar ${ln} kata. Dasar tulisan dari pengguna:\n${nt||'(kosong — susun dari konteks; untuk data/angka/fakta yang tidak diketahui tulis penanda [ISI: ...])'}`,revisi:`Revisi teks berikut: perbaiki tata bahasa, kohesi, argumen, dan kosakata akademik; pertahankan makna, data, dan sitasi.\n\n${tx}`,panjang:`Kembangkan teks berikut menjadi lebih mendalam (sekitar ${ln} kata) tanpa menambah data/fakta baru yang tidak ada:\n\n${tx}`,para:`Parafrase teks berikut dengan bahasa akademik; makna dan sitasi tetap:\n\n${tx}`}[kind];
-try{const o=await ai(prompt(d,k,task));window.AO=o.trim();$('#res').innerHTML=`<div class="card"><b>Hasil AI</b><div class="pre" style="margin:10px 0">${e(o)}</div><button class="p" onclick="useAI(0)">Ganti isi bagian</button><button class="s" onclick="useAI(1)">Tambahkan di bawah</button><button class="s" onclick="$('#res').innerHTML=''">Buang</button></div>`}catch(x){$('#res').innerHTML='<div class="card err">'+e(x.message)+'</div>'}}
+async function act(kind){const d=cd(),k=d.sel,x=secs(d).find(y=>y[0]==k),tx=d.sec[k]||'';if(kind!='tulis'&&!tx.trim())return alert('Bagian ini masih kosong.');$('#res').innerHTML='<p class="m">AI bekerja…</p>';
+const task={tulis:taskOf(d,x),revisi:`Revisi teks berikut: perbaiki tata bahasa, kohesi, argumen, kosakata akademik; pertahankan makna, data, dan kode sitasi [R#] / sitasi yang ada.\n\n${tx}`,panjang:`Kembangkan teks berikut sekitar ${x[4]} kata tanpa menambah fakta baru:\n\n${tx}`,para:`Parafrase teks berikut dengan bahasa akademik; makna dan sitasi tetap:\n\n${tx}`}[kind];
+try{const o=conv(d,(await ai(prompt(d,k,task))).trim());window.AO=o;$('#res').innerHTML=`<div class="card"><b>Hasil AI</b><div class="pre" style="margin:10px 0">${e(o)}</div><button class="p" onclick="useAI(0)">Ganti isi bagian</button><button class="s" onclick="useAI(1)">Tambahkan di bawah</button><button class="s" onclick="$('#res').innerHTML=''">Buang</button></div>`}catch(x){$('#res').innerHTML='<div class="card err">'+e(x.message)+'</div>'}}
 function useAI(add){const d=cd(),k=d.sel;(d.prev=d.prev||{})[k]=d.sec[k]||'';d.sec[k]=add?((d.sec[k]||'')+'\n\n'+AO).trim():AO;save();draw()}
 function undo(){const d=cd(),k=d.sel;d.sec[k]=d.prev[k];delete d.prev[k];save();draw()}
-async function draftAll(){const d=cd(),end=k=>k=='abstrak'||k=='kunci';const todo=secs(d).filter(x=>!d.sec[x[0]]&&(!x[4]||d.notes[x[0]])).sort((a,b)=>end(a[0])-end(b[0]));
-if(!todo.length)return alert('Tidak ada bagian kosong yang bisa dibuat otomatis. Hasil dan Pembahasan butuh data dari Anda.');if(!confirm('AI akan menulis '+todo.length+' bagian. Lanjut?'))return;
-for(const[i,x]of todo.entries()){$('#dp').textContent='Menulis '+(i+1)+'/'+todo.length+': '+x[1]+'…';try{d.sec[x[0]]=(await ai(prompt(d,x[0],`Tulis bagian "${x[1]}" (${x[3]}) sekitar 300 kata. Dasar: ${d.notes[x[0]]||'(susun dari konteks; data yang tidak diketahui ditandai [ISI: ...])'}`))).trim();save()}catch(er){$('#dp').textContent='Berhenti: '+er.message;return}}draw()}
-const abs=i=>i?Object.entries(i).flatMap(([w,ps])=>ps.map(p=>[p,w])).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).join(' '):'';
-async function srch(){$('#rs').innerHTML='<p class="m">Mencari…</p>';try{const r=await fetch('https://api.openalex.org/works?per-page=10&search='+encodeURIComponent($('#q').value));if(!r.ok)throw Error('OpenAlex '+r.status);
-RS=(await r.json()).results.map(w=>({title:w.title,authors:(w.authorships||[]).map(a=>{const n=a.author.display_name.split(' ');return n.pop()+', '+n.join(' ')}),year:w.publication_year,journal:w.primary_location?.source?.display_name||'',doi:(w.doi||'').replace('https://doi.org/',''),abs:abs(w.abstract_inverted_index)}));
-$('#rs').innerHTML=RS.map((r,i)=>`<div class="ol"><span>${e(r.title)}<br><span class="m">${e(cite(r))} ${e(r.journal)}</span></span><button class="s" onclick="addRef(${i})">Tambah</button></div>`).join('')||'Tidak ada hasil.'}catch(x){$('#rs').textContent=x.message}}
+async function srch(){$('#rs').innerHTML='<p class="m">Mencari…</p>';try{RS=await oa($('#q').value,10);$('#rs').innerHTML=RS.map((r,i)=>`<div class="ol"><span>${e(r.title)}<br><span class="m">${e(cite(r))} ${e(r.journal)}</span></span><button class="s" onclick="addRef(${i})">Tambah</button></div>`).join('')||'Tidak ada hasil.'}catch(x){$('#rs').textContent=x.message}}
 function addRef(i){const d=cd(),r=RS[i];if(d.refs.some(x=>(r.doi&&x.doi==r.doi)||x.title==r.title))return alert('Sudah ada.');d.refs.push(r);save();draw()}
 async function impDoi(){const d=cd();try{const r=await fetch('https://api.crossref.org/works/'+encodeURIComponent($('#doi').value.trim().replace(/^https?:\/\/doi.org\//,'')));if(!r.ok)throw Error('DOI tidak ditemukan ('+r.status+')');const m=(await r.json()).message;
 d.refs.push({title:(m.title||[''])[0],authors:(m.author||[]).map(a=>a.family+', '+(a.given||'')),year:m.issued?.['date-parts']?.[0]?.[0],journal:(m['container-title']||[''])[0],doi:m.DOI,vol:m.volume,pages:m.page,abs:(m.abstract||'').replace(/<[^>]+>/g,'')});save();draw()}catch(x){alert(x.message)}}
@@ -140,16 +152,17 @@ if(x[0]=='abstrak'){o.push({h:'Abstrak',c:1,t,ab:1});continue}if(x[0]=='kunci'){
 if(d.type=='skripsi'&&x[2]!=lg){bn++;sn=0;lg=x[2];o.push({g:x[2]})}sn++;o.push({h:d.type=='skripsi'?bn+'.'+sn+' '+x[1]:sn+'. '+x[1],t})}return o}
 async function expD(){const d=cd(),{Document,Packer,Paragraph,TextRun,AlignmentType:A,PageNumber,Footer}=docx,sk=d.type=='skripsi',F='Times New Roman',LS=sk?360:276;
 const T=(t,o={})=>new TextRun({text:t,font:F,size:o.sz||24,bold:o.b,italics:o.i});
+const RN=t=>t.split(/(\[ISI[^\]]*\])/).filter(Boolean).map(s=>new TextRun({text:s,font:F,size:24,highlight:/^\[ISI/.test(s)?'yellow':undefined}));
 const P=(r,o={})=>new Paragraph({children:r,alignment:o.al||A.JUSTIFIED,spacing:{line:o.line||LS,after:o.after??120},indent:o.ind,keepNext:o.kn,pageBreakBefore:o.pb});
 let ch=[];const Cn=A.CENTER,Lf=A.LEFT;
 if(sk)ch.push(P([T('SKRIPSI',{b:1})],{al:Cn,after:600}),P([T(d.title.toUpperCase(),{b:1})],{al:Cn,after:600}),P([T('Oleh:')],{al:Cn}),P([T(d.author||'[Nama Mahasiswa]',{b:1})],{al:Cn,after:600}),P([T(d.inst||'[Program Studi / Institusi]',{b:1})],{al:Cn}),P([T(String(new Date().getFullYear()))],{al:Cn}));
 else ch.push(P([T(d.title,{b:1,sz:28})],{al:Cn,after:200}),P([T(d.author||'[Nama Penulis]')],{al:Cn}),P([T(d.inst||'[Afiliasi]',{i:1})],{al:Cn,after:300}));
 for(const b of body(d)){if(b.g)ch.push(P([T(b.g,{b:1})],{al:Cn,pb:1}));else if(b.k)ch.push(P([T('Kata kunci: ',{b:1}),T(b.k,{i:1})],{al:Lf}));
-else{ch.push(P([T(sk&&b.ab?'ABSTRAK':b.h,{b:1})],{al:b.c?Cn:Lf,pb:sk&&b.ab,kn:1}));b.t.split(/\n+/).filter(Boolean).forEach(p=>ch.push(P([T(p)],{ind:b.ab?undefined:{firstLine:720}})))}}
-if(d.refs.length){ch.push(P([T('DAFTAR PUSTAKA',{b:1})],{al:Cn,pb:sk,kn:1}));d.refs.slice().sort((a,b)=>refTxt(a).localeCompare(refTxt(b))).forEach(r=>ch.push(P(refParts(r).map(x=>T(x[0],{i:x[1]})),{al:Lf,line:240,after:160,ind:{left:720,hanging:720}})))}
+else{ch.push(P([T(sk&&b.ab?'ABSTRAK':b.h,{b:1})],{al:b.c?Cn:Lf,pb:sk&&b.ab,kn:1}));b.t.split(/\n+/).filter(Boolean).forEach(p=>ch.push(P(RN(p),{ind:b.ab?undefined:{firstLine:720}})))}}
+const R=RX(d);if(R.length){ch.push(P([T('DAFTAR PUSTAKA',{b:1})],{al:Cn,pb:sk,kn:1}));R.slice().sort((a,b)=>refTxt(a).localeCompare(refTxt(b))).forEach(r=>ch.push(P(refParts(r).map(x=>T(x[0],{i:x[1]})),{al:Lf,line:240,after:160,ind:{left:720,hanging:720}})))}
 const doc=new Document({sections:[{properties:{page:{size:{width:11906,height:16838},margin:sk?{top:1701,bottom:1701,left:2268,right:1701}:{top:1440,bottom:1440,left:1440,right:1440}}},footers:{default:new Footer({children:[new Paragraph({alignment:Cn,children:[new TextRun({children:[PageNumber.CURRENT],font:F,size:24})]})]})},children:ch}]});
 try{dl((d.title.slice(0,40).replace(/[^\w\s-]/g,'')||'dokumen')+'.docx',await Packer.toBlob(doc));$('#ex').textContent='DOCX dibuat.'}catch(x){$('#ex').textContent='Gagal: '+x.message}}
-function copyAll(){const d=cd(),r=[d.title];for(const b of body(d)){if(b.g)r.push('\n'+b.g);else if(b.k)r.push('Kata kunci: '+b.k);else r.push('\n'+b.h+'\n'+b.t)}if(d.refs.length)r.push('\nDAFTAR PUSTAKA\n'+d.refs.map(refTxt).sort().join('\n'));
+function copyAll(){const d=cd(),r=[d.title];for(const b of body(d)){if(b.g)r.push('\n'+b.g);else if(b.k)r.push('Kata kunci: '+b.k);else r.push('\n'+b.h+'\n'+b.t)}const R=RX(d);if(R.length)r.push('\nDAFTAR PUSTAKA\n'+R.map(refTxt).sort().join('\n'));
 navigator.clipboard.writeText(r.join('\n')).then(()=>$('#ex').textContent='Tersalin.').catch(()=>$('#ex').textContent='Gagal menyalin.')}
 function bi(f){f.text().then(t=>{D=Object.assign(D,JSON.parse(t));save();draw()})}
 load();
