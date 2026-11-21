@@ -1,0 +1,150 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Academic Research Studio</title>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<style>
+:root{--bg:#f7f6f2;--c:#fff;--t:#1d2433;--m:#6b7280;--a:#1f3a5f;--b:#e5e2d9}
+@media(prefers-color-scheme:dark){:root{--bg:#14171d;--c:#1c2028;--t:#e7e9ee;--m:#9aa3b2;--a:#8fb4e8;--b:#2c323d}}
+*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh}
+nav{width:220px;background:var(--c);border-right:1px solid var(--b);padding:16px 10px;position:sticky;top:0;height:100vh;overflow:auto}
+nav h1{font:600 15px Georgia,serif;margin:0 8px 14px;color:var(--a)}nav a{display:block;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--m)}
+nav a.on,nav a:hover{background:var(--bg);color:var(--t)}main{flex:1;padding:24px;max-width:960px;min-width:0}
+h2{font:600 22px Georgia,serif;margin:0 0 14px}.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:12px}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.n{font:600 28px Georgia,serif;color:var(--a)}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;background:var(--bg);color:var(--t);font:inherit;margin:4px 0 8px}
+textarea{min-height:180px}button{background:var(--a);color:var(--bg);border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit;margin:2px 4px 2px 0}
+button.s{background:transparent;color:var(--a);border:1px solid var(--b)}.m{color:var(--m);font-size:13px}.pre{white-space:pre-wrap}
+table{border-collapse:collapse;width:100%;font-size:13px}td,th{border:1px solid var(--b);padding:5px;text-align:left}.w{overflow:auto}
+.warn{border-left:3px solid #c98a1b;padding-left:10px;color:var(--m)}
+@media(max-width:800px){body{display:block}nav{width:auto;height:auto;position:static;display:flex;overflow-x:auto;padding:8px}nav h1{display:none}nav a{white-space:nowrap}main{padding:14px}}
+</style></head><body>
+<nav id="nav"></nav><main id="m">Memuat…</main>
+<script>
+const V=['Dashboard','My Research','Start New Research','Idea & Title','Literature Search','Article Writer','Data Analyzer','Reference Manager','Journal Finder','Quality Checker','Settings'];
+const SEC=['Title','Abstract','Keywords','Introduction','Literature Review','Method','Results','Discussion','Conclusion','Acknowledgment'];
+let D={projects:[],refs:[],set:{model:'gemini-2.5-flash',key:'',style:'APA 7'},cur:null,act:[]},view='Dashboard',data=null;
+const $=s=>document.querySelector(s),e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const idb=()=>new Promise(r=>{const q=indexedDB.open('ars',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>r(q.result)});
+function load(){idb().then(d=>{const g=d.transaction('k').objectStore('k').get('d');g.onsuccess=()=>{if(g.result)D=Object.assign(D,g.result);go('Dashboard')}})}
+function save(){idb().then(d=>d.transaction('k','readwrite').objectStore('k').put(D,'d'))}
+function log(t){D.act.unshift(new Date().toLocaleString()+' — '+t);D.act=D.act.slice(0,15);save()}
+const P=()=>D.projects.find(p=>p.id===D.cur);
+function go(v){view=v;$('#nav').innerHTML='<h1>Academic Research Studio</h1>'+V.map(x=>`<a class="${x==v?'on':''}" onclick="go('${x}')">${x}</a>`).join('');$('#m').innerHTML=R[v]();if(R[v+'_'])R[v+'_']()}
+async function ai(p){if(!D.set.key)throw Error('API key Gemini belum diisi (Settings). Fitur non-AI tetap berfungsi.');
+const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${D.set.model}:generateContent`,{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':D.set.key},body:JSON.stringify({contents:[{parts:[{text:p}]}]})});
+const j=await r.json();if(!r.ok)throw Error(j.error?.message||r.status);return(j.candidates?.[0]?.content?.parts||[]).map(x=>x.text).join('')}
+const abs=i=>i?Object.entries(i).flatMap(([w,ps])=>ps.map(p=>[p,w])).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).join(' '):'';
+async function oa(q,f=''){const r=await fetch(`https://api.openalex.org/works?search=${encodeURIComponent(q)}&per-page=10${f}`);if(!r.ok)throw Error('OpenAlex '+r.status);
+return(await r.json()).results.map(w=>({title:w.title,authors:(w.authorships||[]).map(a=>{const n=a.author.display_name.split(' ');return n.pop()+', '+n.join(' ')}),year:w.publication_year,journal:w.primary_location?.source?.display_name||'',publisher:w.primary_location?.source?.host_organization_name||'',doi:(w.doi||'').replace('https://doi.org/',''),oa:w.open_access?.is_oa,url:w.doi||w.primary_location?.landing_page_url||w.id,abs:abs(w.abstract_inverted_index),src:'OpenAlex'}))}
+async function cr(doi){const r=await fetch('https://api.crossref.org/works/'+encodeURIComponent(doi.trim().replace(/^https?:\/\/doi.org\//,'')));if(!r.ok)throw Error('DOI tidak ditemukan di Crossref ('+r.status+')');const m=(await r.json()).message;
+return{title:(m.title||[''])[0],authors:(m.author||[]).map(a=>a.family+', '+(a.given||'')),year:m.issued?.['date-parts']?.[0]?.[0],journal:(m['container-title']||[''])[0],publisher:m.publisher,doi:m.DOI,vol:m.volume,iss:m.issue,pages:m.page,url:m.URL,src:'Crossref',abs:(m.abstract||'').replace(/<[^>]+>/g,'')}}
+const ini=g=>(g||'').split(/[\s.]+/).filter(Boolean).map(x=>x[0]+'.').join(' ');
+function fmt(r,s=D.set.style){const a=r.authors.map(x=>{const[f,g]=x.split(', ');return{f,g:g||''}}),d=r.doi?' https://doi.org/'+r.doi:'',j=r.journal?r.journal:'';
+const J=(l,x)=>a.length>l?x.slice(0,l).join(', ')+', et al.':x.join(', ');
+if(s.startsWith('APA'))return`${a.map(x=>x.f+', '+ini(x.g)).join(', ').replace(/, ([^,]+)$/,', & $1')} (${r.year}). ${r.title}. ${j}${r.vol?', '+r.vol:''}${r.pages?', '+r.pages:''}.${d}`;
+if(s=='IEEE')return`${a.map(x=>ini(x.g)+' '+x.f).join(', ')}, "${r.title}," ${j}, ${r.year}.${d}`;
+if(s=='Vancouver')return`${J(6,a.map(x=>x.f+' '+ini(x.g).replace(/[. ]/g,''))) }. ${r.title}. ${j}. ${r.year}.${d}`;
+if(s=='Harvard')return`${a.map(x=>x.f+', '+ini(x.g)).join(', ')} (${r.year}) '${r.title}', ${j}.${d}`;
+if(s=='MLA')return`${a[0]?a[0].f+', '+a[0].g+(a.length>1?', et al':''):''}. "${r.title}." ${j}, ${r.year}.${d}`;
+return`${a[0]?a[0].f+', '+a[0].g:''}${a.length>1?' et al':''}. ${r.year}. "${r.title}." ${j}.${d}`}
+const dl=(n,t,m='text/plain')=>{const x=document.createElement('a');x.href=URL.createObjectURL(t instanceof Blob?t:new Blob([t],{type:m}));x.download=n;x.click()};
+const refCtx=()=>D.refs.slice(0,15).map(r=>`- ${r.authors[0]||''} (${r.year}) ${r.title}. ${r.journal} doi:${r.doi}`).join('\n');
+const RULE='\nATURAN: jangan mengarang referensi, DOI, data, atau hasil. Hanya gunakan literatur yang diberikan sebagai rujukan. Novelty hanya "potensi", bukan kepastian. Tandai hal yang perlu diverifikasi.';
+async function run(kind,input,extra=''){let w=[];try{w=await oa(input.slice(0,200))}catch(x){}
+const lit=w.slice(0,8).map(r=>`- ${r.authors[0]||''} (${r.year}) ${r.title}. ${r.journal} doi:${r.doi}`).join('\n');
+const T={eval:'Evaluasi judul penelitian berikut: kejelasan, kespesifikan, relevansi, researchability, potensi novelty, ketersediaan literatur & data, kelayakan metode, kontribusi teoritis/praktis, potensi publikasi (skor 1-5 tiap aspek). Identifikasi variabel/konsep & objek, research gap, rekomendasi metodologi, dan 3 alternatif judul yang lebih baik.',
+topic:'Kembangkan topik berikut menjadi 5 alternatif judul. Untuk tiap judul: alasan, latar belakang singkat, fenomena, referensi pendukung (dari daftar), potensi gap, potensi novelty, metode, data diperlukan, tingkat kesulitan.',
+ideas:'Berperan sebagai Research Idea Discovery Assistant. Berdasarkan literatur terkini berikut, usulkan 5 ide penelitian yang berlandaskan literatur: tren, area kurang dieksplorasi, perdebatan, peluang interdisipliner, isu lokal.',
+data:'Berdasarkan ringkasan karakteristik data berikut (jangan mengubah data / mengarang hasil), rekomendasikan fokus penelitian, 3 judul sesuai, dan analisis yang layak.'}[kind];
+const lt='\n\nLiteratur terkait (OpenAlex, nyata):\n'+(lit||'(tidak ada / gagal diakses)');
+let out='';try{out=await ai(`${T}${RULE}\nBahasa Indonesia akademik.\n\nInput: ${input}\n${extra}${lt}`)}catch(x){out='[AI tidak tersedia: '+x.message+']'}
+return out+'\n\n— Literatur terkait (OpenAlex) —\n'+w.map(r=>`• ${r.authors[0]||''} (${r.year}) ${r.title} — ${r.journal} ${r.doi?'https://doi.org/'+r.doi:''}`).join('\n')}
+const busy=s=>$('#out').innerHTML='<p class="m">'+s+'…</p>';
+const R={
+Dashboard(){const n=D.projects.length;return`<h2>Dashboard</h2><div class="g">${[['Proyek',n],['Draft aktif',D.projects.filter(p=>Object.values(p.sec||{}).some(Boolean)).length],['Referensi',D.refs.length],['Template',0]].map(x=>`<div class="card"><div class="n">${x[1]}</div>${x[0]}</div>`).join('')}</div>
+<div class="card"><b>Progres penelitian</b>${D.projects.map(p=>{const k=SEC.filter(s=>p.sec?.[s]).length;return`<div>${e(p.name)} <progress value="${k}" max="${SEC.length}"></progress> ${k}/${SEC.length}</div>`}).join('')||'<p class="m">Belum ada proyek.</p>'}</div>
+<div class="card"><b>Aktivitas terbaru</b><div class="m">${D.act.map(e).join('<br>')||'—'}</div></div>`},
+'My Research'(){return`<h2>My Research</h2><input placeholder="Cari proyek…" oninput="document.querySelectorAll('.pj').forEach(x=>x.hidden=!x.textContent.toLowerCase().includes(this.value.toLowerCase()))">
+${D.projects.map((p,i)=>`<div class="card pj"><b>${e(p.name)}</b> <span class="m">(${p.mode}) ${D.cur==p.id?'• aktif':''}</span>
+<label class="m">Judul terpilih</label><input value="${e(p.title)}" onchange="D.projects[${i}].title=this.value;save()">
+<label class="m">Target jurnal / status</label><input value="${e(p.target||'')}" onchange="D.projects[${i}].target=this.value;save()">
+<details><summary>Hasil analisis AI & literatur (dapat diedit)</summary><textarea onchange="D.projects[${i}].notes=this.value;save()">${e(p.notes)}</textarea></details>
+<button onclick="D.cur='${p.id}';save();go('Article Writer')">Buka Writer</button><button class="s" onclick="D.cur='${p.id}';save();go('My Research')">Jadikan aktif</button><button class="s" onclick="if(confirm('Hapus?')){D.projects.splice(${i},1);save();go('My Research')}">Hapus</button></div>`).join('')||'<p class="m">Belum ada proyek. Mulai dari Start New Research.</p>'}`},
+'Start New Research'(){return`<h2>Start New Research</h2><div class="card"><label class="m">Nama proyek</label><input id="pn">
+<label class="m">Titik awal</label><select id="md" onchange="$('#fl').hidden=this.value!='data'"><option value="eval">1. I Already Have a Research Title</option><option value="topic">2. I Have a Research Topic</option><option value="ideas">3. I Need Research Ideas (isi bidang/lokasi/minat)</option><option value="data">4. I Have Research Data (CSV/XLSX)</option></select>
+<textarea id="in" style="min-height:80px" placeholder="Judul / topik / bidang ilmu + lokasi + minat"></textarea><input id="fl" type="file" accept=".csv,.xlsx,.xls" hidden>
+<button onclick="startP()">Mulai</button></div><div id="out" class="card pre" hidden></div>`},
+async 'Idea & Title_'(){},
+'Idea & Title'(){return`<h2>Idea & Title</h2><div class="card"><select id="k"><option value="ideas">Cari ide penelitian</option><option value="topic">Generate judul dari topik</option><option value="eval">Evaluasi judul</option></select>
+<textarea id="in" style="min-height:80px" placeholder="Bidang ilmu, lokasi, minat, target publikasi / topik / judul"></textarea><button onclick="busy('Menelusuri literatur & AI');run($('#k').value,$('#in').value).then(t=>{window.last=t;$('#out').innerHTML='<div class=pre>'+e(t)+'</div>'})">Jalankan</button></div><div id="out" class="card"></div>`},
+'Literature Search'(){return`<h2>Literature Search</h2><div class="card"><input id="q" placeholder="Keyword, judul, penulis (Indonesia/Inggris) atau DOI">
+<div class="g"><input id="y1" placeholder="Tahun dari"><input id="y2" placeholder="Tahun sampai"><select id="oa"><option value="">Semua akses</option><option value="1">Open access saja</option></select></div>
+<button onclick="srch()">Cari</button><button class="s" onclick="doi()">Ambil metadata DOI</button><button class="s" onclick="kw()">Kembangkan keyword (AI)</button></div><div id="out"></div>`},
+'Article Writer'(){const p=P();if(!p)return'<h2>Article Writer</h2><p>Pilih proyek aktif di My Research atau buat proyek baru.</p>';p.sec=p.sec||{};
+return`<h2>Article Writer — ${e(p.name)}</h2><div class="card"><select id="sc" onchange="ws()">${SEC.map(s=>`<option>${s}</option>`).join('')}</select>
+<textarea id="tx" style="min-height:320px" oninput="P().sec[$('#sc').value]=this.value;save();$('#wc').textContent=this.value.trim().split(/\\s+/).filter(Boolean).length"></textarea><div class="m">Kata: <span id="wc">0</span> • autosave aktif</div>
+<select id="md"><option>Draft</option><option>Academic Revision</option><option>Deep Revision</option><option>Critical Review</option><option>Journal-Ready Editing</option></select>
+<button onclick="wa('w')">Tulis/Revisi (AI)</button><button class="s" onclick="wa('en')">Terjemah ke English</button><button class="s" onclick="wa('id')">Terjemah ke Indonesia</button><button class="s" onclick="wa('c')">Kritik</button>
+<button class="s" onclick="ver()">Simpan versi</button><button class="s" onclick="rest()">Riwayat versi</button><button onclick="expD()">Export DOCX</button></div><div id="out" class="card pre" hidden></div>`},
+'Article Writer_'(){ws()},
+'Data Analyzer'(){return`<h2>Data Analyzer</h2><div class="card"><input type="file" id="f" accept=".csv,.xlsx,.xls" onchange="ld(this.files[0])"><div class="m">Semua angka dihitung langsung di browser dari data Anda.</div></div><div id="out"></div>`},
+'Reference Manager'(){return`<h2>Reference Manager</h2><div class="card"><select onchange="D.set.style=this.value;save();go(view)">${['APA 6','APA 7','IEEE','Vancouver','Harvard','Chicago','MLA'].map(s=>`<option ${s==D.set.style?'selected':''}>${s}</option>`).join('')}</select>
+<input id="d" placeholder="DOI untuk import"><button onclick="imp()">Import DOI</button><button class="s" onclick="ris()">Import RIS/BibTeX…</button><input type="file" id="rf" hidden onchange="rimp(this.files[0])">
+<button class="s" onclick="dl('refs.ris',toRIS())">Export RIS</button><button class="s" onclick="dl('refs.bib',toBib())">Export BibTeX</button><button class="s" onclick="dl('refs.csv',toCSV(),'text/csv')">Export CSV</button><button class="s" onclick="dl('biblio.txt',D.refs.map(r=>fmt(r)).sort().join('\\n\\n'))">Bibliografi</button></div>
+<div id="out">${D.refs.map((r,i)=>`<div class="card">${e(fmt(r))}<br><button class="s" onclick="D.refs.splice(${i},1);save();go(view)">Hapus</button></div>`).join('')||'<p class="m">Belum ada referensi.</p>'}</div>`},
+'Journal Finder'(){return`<h2>Journal Finder</h2><div class="card"><textarea style="min-height:90px" id="q" placeholder="Judul / abstrak / bidang"></textarea><button onclick="jf()">Cari jurnal (OpenAlex)</button>
+<p class="warn">Indeksasi (Scopus/SINTA), biaya, dan reputasi TIDAK diverifikasi di sini. Periksa situs resmi jurnal, Scopus Sources, SINTA, DOAJ; waspadai jurnal predator.</p></div><div id="out"></div>`},
+'Quality Checker'(){const p=P();return`<h2>Quality Checker</h2><div class="card"><p class="m">Pemeriksaan heuristik (struktur, sitasi vs daftar pustaka). Bukan jaminan lolos peer review, plagiarisme, atau detektor AI.</p><button onclick="qc()">Periksa proyek aktif ${p?'('+e(p.name)+')':''}</button><button class="s" onclick="qa()">Telaah kritis (AI)</button></div><div id="out" class="card pre"></div>`},
+Settings(){return`<h2>Settings</h2><div class="card"><label class="m">Provider</label><select><option>Google Gemini (free tier, kuota terbatas)</option></select>
+<label class="m">Model</label><input value="${e(D.set.model)}" onchange="D.set.model=this.value;save()"><label class="m">API key (disimpan hanya di browser ini)</label><input type="password" value="${e(D.set.key)}" onchange="D.set.key=this.value;save()">
+<button onclick="ai('Balas hanya: OK').then(t=>$('#st').textContent='Terhubung: '+t).catch(x=>$('#st').textContent='Gagal: '+x.message)">Tes koneksi</button><div id="st" class="m"></div></div>
+<div class="card"><b>Backup</b><br><button onclick="dl('ars-backup.json',JSON.stringify(D),'application/json')">Export JSON</button><button class="s" onclick="$('#bf').click()">Import JSON</button><input id="bf" type="file" hidden onchange="bi(this.files[0])"></div>`},
+'Data Analyzer_':0};
+async function startP(){const m=$('#md').value;let inp=$('#in').value,ex='';$('#out').hidden=false;busy('Memproses');
+if(m=='data'){const f=$('#fl').files[0];if(!f)return $('#out').textContent='Pilih file data.';await ld(f,true);ex='Ringkasan data:\n'+sumData();inp=inp||data.cols.join(' ')}
+const t=await run(m,inp,ex);const p={id:'p'+Date.now(),name:$('#pn').value||inp.slice(0,50),mode:m,title:m=='eval'?inp:'',notes:t,sec:{}};D.projects.push(p);D.cur=p.id;log('Proyek baru: '+p.name);$('#out').innerHTML='<div class=pre>'+e(t)+'</div><button onclick="go(\'My Research\')">Buka di My Research</button>'}
+const rc=(r,i)=>`<div class="card"><b>${e(r.title)}</b><br><span class="m">${e(r.authors.slice(0,4).join('; '))} • ${r.year} • ${e(r.journal)} ${e(r.publisher||'')} • ${r.src} • ${r.oa?'Open Access':'Akses tidak terverifikasi terbuka'}</span><br>${r.doi?`<a href="https://doi.org/${e(r.doi)}" target="_blank">DOI: ${e(r.doi)}</a>`:''}
+${r.abs?`<details><summary>Abstrak</summary>${e(r.abs)}</details>`:'<span class="m">Abstrak tidak tersedia; full text tidak dibaca.</span>'}<br><button onclick="sv(${i})">Simpan referensi</button></div>`;
+let RES=[];function sv(i){const r=RES[i];if(D.refs.some(x=>(x.doi&&x.doi==r.doi)||x.title==r.title))return alert('Duplikat terdeteksi');D.refs.push(r);log('Referensi disimpan');alert('Tersimpan')}
+async function srch(){busy('Mencari');try{let f='';const y1=$('#y1').value,y2=$('#y2').value,fl=[];if(y1)fl.push('from_publication_date:'+y1+'-01-01');if(y2)fl.push('to_publication_date:'+y2+'-12-31');if($('#oa').value)fl.push('is_oa:true');if(fl.length)f='&filter='+fl.join(',');
+RES=await oa($('#q').value,f);$('#out').innerHTML=RES.map(rc).join('')||'Tidak ada hasil.'}catch(x){$('#out').textContent=x.message}}
+async function doi(){busy('Crossref');try{RES=[await cr($('#q').value)];$('#out').innerHTML=rc(RES[0],0)}catch(x){$('#out').textContent=x.message}}
+async function kw(){busy('AI');try{$('#out').innerHTML='<div class="card pre">'+e(await ai('Berikan 15 keyword akademik (Indonesia & Inggris, sinonim, istilah teknis) untuk: '+$('#q').value))+'</div>'}catch(x){$('#out').textContent=x.message}}
+function ws(){const p=P();$('#tx').value=p.sec[$('#sc').value]||'';$('#wc').textContent=$('#tx').value.trim().split(/\s+/).filter(Boolean).length}
+async function wa(k){const p=P(),s=$('#sc').value,tx=$('#tx').value,md=$('#md').value;$('#out').hidden=false;busy('AI bekerja');
+const T={w:`Mode ${md}: tulis/revisi bagian "${s}" artikel ilmiah, pertahankan makna & data asli, alur argumentasi koheren, tanpa kalimat generik/redundan. Sitasi hanya dari daftar referensi (format penulis, tahun).`,en:'Terjemahkan ke Academic English tanpa mengubah makna & data.',id:'Terjemahkan ke Bahasa Indonesia akademik tanpa mengubah makna & data.',c:'Kritik bagian ini: argumen lemah, klaim tanpa referensi, overclaim, bias. Beri saran spesifik.'}[k];
+try{const o=await ai(`${T}${RULE}\nJudul: ${p.title}\nCatatan proyek:\n${p.notes.slice(0,2500)}\nReferensi tersedia:\n${refCtx()}\n\nTeks:\n${tx}`);$('#out').innerHTML='<b>Hasil AI</b><div class=pre>'+e(o)+'</div><button onclick="P().sec[$(\'#sc\').value]=window.ao;save();ws();$(\'#out\').hidden=true">Terapkan ke bagian</button>';window.ao=o}catch(x){$('#out').textContent=x.message}}
+function ver(){const p=P();(p.ver=p.ver||[]).unshift({t:new Date().toLocaleString(),sec:{...p.sec}});p.ver=p.ver.slice(0,20);save();alert('Versi disimpan')}
+function rest(){const p=P();$('#out').hidden=false;$('#out').innerHTML=(p.ver||[]).map((v,i)=>`<div>${v.t} <button class=s onclick="P().sec={...P().ver[${i}].sec};save();ws()">Pulihkan</button></div>`).join('')||'Belum ada versi.'}
+async function expD(){const p=P(),{Document,Packer,Paragraph,HeadingLevel,TextRun}=docx,ch=[new Paragraph({heading:HeadingLevel.TITLE,children:[new TextRun(p.title||p.name)]})];
+SEC.slice(1).forEach(s=>{const t=p.sec[s];if(!t)return;ch.push(new Paragraph({heading:HeadingLevel.HEADING_1,children:[new TextRun(s)]}));t.split(/\n+/).forEach(l=>ch.push(new Paragraph({children:[new TextRun(l)],spacing:{after:120}})))});
+ch.push(new Paragraph({heading:HeadingLevel.HEADING_1,children:[new TextRun('References')]}));D.refs.map(r=>fmt(r)).sort().forEach(l=>ch.push(new Paragraph({children:[new TextRun(l)]})));
+dl((p.name||'artikel')+'.docx',await Packer.toBlob(new Document({sections:[{children:ch}]})));log('Export DOCX')}
+async function ld(f,q){const b=await f.arrayBuffer(),w=XLSX.read(b),rows=XLSX.utils.sheet_to_json(w.Sheets[w.SheetNames[0]]);data={rows,cols:Object.keys(rows[0]||{})};data.num=data.cols.filter(c=>rows.filter(r=>typeof r[c]=='number').length>rows.length*.8);if(!q)$('#out').innerHTML=rep()}
+const mean=a=>a.reduce((s,x)=>s+x,0)/a.length,sd=a=>{const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1))},col=c=>data.rows.map(r=>r[c]).filter(x=>typeof x=='number');
+const cor=(a,b)=>{const n=Math.min(a.length,b.length),x=a.slice(0,n),y=b.slice(0,n),mx=mean(x),my=mean(y);return x.reduce((s,v,i)=>s+(v-mx)*(y[i]-my),0)/Math.sqrt(x.reduce((s,v)=>s+(v-mx)**2,0)*y.reduce((s,v)=>s+(v-my)**2,0))};
+function sumData(){return`${data.rows.length} baris; kolom: ${data.cols.join(', ')}; numerik: ${data.num.join(', ')}`}
+function rep(){const N=data.num,f=x=>isFinite(x)?x.toFixed(3):'-';let h=`<div class="card"><b>${sumData()}</b></div><div class="card w"><b>Statistik deskriptif</b><table><tr><th>Variabel<th>N<th>Mean<th>SD<th>Min<th>Max</tr>${N.map(c=>{const a=col(c);return`<tr><td>${e(c)}<td>${a.length}<td>${f(mean(a))}<td>${f(sd(a))}<td>${Math.min(...a)}<td>${Math.max(...a)}</tr>`}).join('')}</table></div>`;
+if(N.length>1){h+=`<div class="card w"><b>Korelasi Pearson</b><table><tr><th>${N.map(c=>'<th>'+e(c)).join('')}</tr>${N.map(a=>`<tr><th>${e(a)}${N.map(b=>'<td>'+f(cor(col(a),col(b)))).join('')}</tr>`).join('')}</table>`;
+const k=N.length,tot=data.rows.map(r=>N.reduce((s,c)=>s+(r[c]||0),0)),al=k/(k-1)*(1-N.reduce((s,c)=>s+sd(col(c))**2,0)/sd(tot)**2);h+=`<p>Cronbach's α (seluruh kolom numerik sebagai satu skala): <b>${f(al)}</b> — gunakan hanya jika kolom adalah butir satu konstruk.</p><p class="m">Regresi, uji asumsi klasik, dan analisis kualitatif belum tersedia di versi ini.</p></div>`}
+return h}
+function toRIS(){return D.refs.map(r=>`TY  - JOUR\n${r.authors.map(a=>'AU  - '+a).join('\n')}\nTI  - ${r.title}\nJO  - ${r.journal}\nPY  - ${r.year}\nDO  - ${r.doi||''}\nER  - `).join('\n')}
+function toBib(){return D.refs.map((r,i)=>`@article{ref${i+1},\n author={${r.authors.join(' and ')}},\n title={${r.title}},\n journal={${r.journal}},\n year={${r.year}},\n doi={${r.doi||''}}\n}`).join('\n')}
+function toCSV(){return'title,authors,year,journal,doi\n'+D.refs.map(r=>[r.title,r.authors.join('; '),r.year,r.journal,r.doi].map(x=>'"'+String(x||'').replace(/"/g,'""')+'"').join(',')).join('\n')}
+async function imp(){try{const r=await cr($('#d').value);if(D.refs.some(x=>x.doi==r.doi))return alert('Duplikat');D.refs.push(r);log('Import DOI '+r.doi);go(view)}catch(x){alert(x.message)}}
+function ris(){$('#rf').click()}
+async function rimp(f){const t=await f.text();let n=0;if(t.includes('TY  -'))t.split('ER  -').forEach(b=>{const g=k=>[...b.matchAll(new RegExp('^'+k+'  - (.*)$','gm'))].map(m=>m[1].trim());if(g('TI')[0]){D.refs.push({title:g('TI')[0],authors:g('AU'),year:(g('PY')[0]||'').slice(0,4),journal:g('JO')[0]||g('T2')[0]||'',doi:g('DO')[0]||'',src:'RIS'});n++}});
+else t.split(/@\w+\s*\{/).slice(1).forEach(b=>{const g=k=>(b.match(new RegExp(k+'\\s*=\\s*[{"](.*?)[}"],?\\s*\\n','i'))||[])[1]||'';if(g('title')){D.refs.push({title:g('title'),authors:g('author').split(/ and /).filter(Boolean),year:g('year'),journal:g('journal'),doi:g('doi'),src:'BibTeX'});n++}});save();alert(n+' referensi diimpor');go(view)}
+async function jf(){busy('Mencari');try{const r=await fetch('https://api.openalex.org/sources?search='+encodeURIComponent($('#q').value.slice(0,150))+'&per-page=10');const j=(await r.json()).results;
+$('#out').innerHTML=j.map(s=>`<div class="card"><b>${e(s.display_name)}</b><br><span class="m">${e(s.host_organization_name||'penerbit n/a')} • DOAJ: ${s.is_in_doaj?'terdaftar':'tidak tercatat'} • OA: ${s.is_oa?'ya':'tidak'} • APC: ${s.apc_usd?'USD '+s.apc_usd+' (data OpenAlex, verifikasi di situs resmi)':'n/a'}</span><br>${s.homepage_url?`<a target=_blank href="${e(s.homepage_url)}">Website & author guidelines</a>`:''}<br><span class="m">Indeksasi Scopus/SINTA: perlu verifikasi manual.</span></div>`).join('')}catch(x){$('#out').textContent=x.message}}
+function qc(){const p=P();if(!p)return $('#out').textContent='Tidak ada proyek aktif.';const s=p.sec||{},all=Object.values(s).join('\n'),L=[];
+SEC.forEach(k=>L.push((s[k]?'✓ ':'✗ ')+k+(s[k]?' ('+s[k].split(/\s+/).length+' kata)':' — kosong')));
+const wa=(s.Abstract||'').split(/\s+/).filter(Boolean).length;if(wa&&(wa<100||wa>300))L.push('⚠ Abstrak '+wa+' kata; cek batas jurnal (umumnya 150–250).');
+const cites=[...all.matchAll(/\(([^()]*?)[, ]+(\d{4})[a-z]?\)/g)];const miss=cites.filter(c=>!D.refs.some(r=>String(r.year)==c[2]&&c[1].toLowerCase().includes((r.authors[0]||'').split(',')[0].toLowerCase())));
+L.push('Sitasi terdeteksi: '+cites.length);miss.forEach(c=>L.push('⚠ Sitasi tanpa referensi tersimpan: '+c[0]));
+D.refs.forEach(r=>{const n=(r.authors[0]||'').split(',')[0];if(n&&!all.includes(n))L.push('⚠ Referensi tidak disitasi: '+n+' ('+r.year+')')});
+L.push('\nStatus: '+(L.some(x=>x[0]=='✗'||x[0]=='⚠')?'Needs Revision':'Manual Verification Required')+' (konsistensi tujuan–hasil–kesimpulan perlu telaah AI/manusia).');$('#out').textContent=L.join('\n')}
+async function qa(){const p=P();busy('AI');try{$('#out').innerHTML='<div class=pre>'+e(await ai('Periksa konsistensi judul–tujuan–metode–hasil–pembahasan–kesimpulan, overclaim, bias, keterbatasan, kekuatan argumen. Beri temuan spesifik.'+RULE+'\n'+JSON.stringify({t:p.title,s:p.sec})))+'</div>'}catch(x){$('#out').textContent=x.message}}
+function bi(f){f.text().then(t=>{D=Object.assign(D,JSON.parse(t));save();go('Dashboard')})}
+load();
+</script></body></html>
