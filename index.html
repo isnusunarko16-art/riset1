@@ -3,23 +3,54 @@
 <script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-:root{--bg:#f7f6f2;--c:#fff;--t:#1d2433;--m:#6b7280;--a:#1f3a5f;--b:#e5e2d9}
-@media(prefers-color-scheme:dark){:root{--bg:#14171d;--c:#1c2028;--t:#e7e9ee;--m:#9aa3b2;--a:#8fb4e8;--b:#2c323d}}
-*{box-sizing:border-box}body{margin:0;font:15px/1.55 system-ui,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh}
-nav{width:220px;background:var(--c);border-right:1px solid var(--b);padding:16px 10px;position:sticky;top:0;height:100vh;overflow:auto}
-nav h1{font:600 15px Georgia,serif;margin:0 8px 14px;color:var(--a)}nav a{display:block;padding:8px 10px;border-radius:8px;cursor:pointer;color:var(--m)}
-nav a.on,nav a:hover{background:var(--bg);color:var(--t)}main{flex:1;padding:24px;max-width:960px;min-width:0}
-h2{font:600 22px Georgia,serif;margin:0 0 14px}.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:16px;margin-bottom:12px}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}.n{font:600 28px Georgia,serif;color:var(--a)}
-input,select,textarea{width:100%;padding:9px;border:1px solid var(--b);border-radius:8px;background:var(--bg);color:var(--t);font:inherit;margin:4px 0 8px}
-textarea{min-height:180px}button{background:var(--a);color:var(--bg);border:0;padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit;margin:2px 4px 2px 0}
-button.s{background:transparent;color:var(--a);border:1px solid var(--b)}.m{color:var(--m);font-size:13px}.pre{white-space:pre-wrap}
-table{border-collapse:collapse;width:100%;font-size:13px}td,th{border:1px solid var(--b);padding:5px;text-align:left}.w{overflow:auto}
-.warn{border-left:3px solid #c98a1b;padding-left:10px;color:var(--m)}
-@media(max-width:800px){body{display:block}nav{width:auto;height:auto;position:static;display:flex;overflow-x:auto;padding:8px}nav h1{display:none}nav a{white-space:nowrap}main{padding:14px}}
-</style></head><body>
-<nav id="nav"></nav><main id="m">Memuat…</main>
-<script>
+:root{--bg:#f2f4f8;--c:#fff;--t:#17202e;--m:#667085;--a:#2557b8;--ah:#1c4496;--b:#dde3ec;--side:#0f2238;--sidet:#aebdd1;--ok:#1a7f5a;--warn:#b7791f}
+@media(prefers-color-scheme:dark){:root{--bg:#0e131b;--c:#161d28;--t:#e6eaf1;--m:#93a0b4;--a:#6f9cf0;--ah:#8fb2f5;--b:#273140;--side:#0a1220}}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--t);display:flex;min-height:100vh;-webkit-font-smoothing:antialiased}
+nav{width:244px;background:var(--side);padding:22px 12px;position:sticky;top:0;height:100vh;overflow:auto;flex-shrink:0}
+nav h1{font:700 17px/1.25 Georgia,"Times New Roman",serif;margin:0 10px 22px;color:#fff;letter-spacing:.2px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.12)}
+nav a{display:block;padding:9px 12px;margin-bottom:2px;border-radius:8px;cursor:pointer;color:var(--sidet);font-weight:500;font-size:14px;border-left:3px solid transparent;transition:background .15s,color .15s}
+nav a:hover{background:rgba(255,255,255,.07);color:#fff}
+nav a.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:#7fb0ff}
+main{flex:1;padding:36px 40px 60px;max-width:1040px;min-width:0}
+h2{font:700 26px/1.25 Georgia,"Times New Roman",serif;margin:0 0 22px;letter-spacing:-.2px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:10px;padding:20px;margin-bottom:14px;box-shadow:0 1px 2px rgba(16,32,56,.04)}
+.card b{font-weight:600}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:14px}
+.g .card{margin:0;border-top:3px solid var(--a)}
+.n{font:700 34px/1.1 Georgia,serif;color:var(--t);margin-bottom:4px}
+label.m{display:block;margin-top:6px;font-weight:500}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--b);border-radius:8px;background:var(--c);color:var(--t);font:inherit;margin:5px 0 12px;transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--a);box-shadow:0 0 0 3px color-mix(in srgb,var(--a) 22%,transparent)}
+textarea{min-height:190px;line-height:1.65;resize:vertical}
+input[type=file]{padding:9px;background:var(--bg)}
+button{background:var(--a);color:#fff;border:1px solid var(--a);padding:9px 16px;border-radius:8px;cursor:pointer;font:inherit;font-weight:600;font-size:14px;margin:3px 6px 3px 0;transition:background .15s}
+button:hover{background:var(--ah)}
+button.s{background:var(--c);color:var(--a);border-color:var(--b)}
+button.s:hover{background:var(--bg);border-color:var(--a)}
+button:focus-visible,a:focus-visible,nav a:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+a{color:var(--a)}
+.m{color:var(--m);font-size:13px}
+.pre{white-space:pre-wrap;line-height:1.7}
+details{margin:8px 0}summary{cursor:pointer;font-weight:600;color:var(--a);padding:4px 0}
+progress{width:130px;height:8px;vertical-align:middle;accent-color:var(--a);margin:0 8px}
+table{border-collapse:collapse;width:100%;font-size:13px;margin-top:8px}
+th{background:var(--bg);font-weight:600}td,th{border:1px solid var(--b);padding:7px 10px;text-align:left}
+tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 55%,transparent)}
+.w{overflow:auto}
+.warn{border-left:3px solid var(--warn);background:color-mix(in srgb,var(--warn) 9%,transparent);padding:10px 14px;border-radius:0 8px 8px 0;color:var(--t);font-size:13.5px}
+@media(max-width:800px){
+body{display:block}
+nav{width:auto;height:auto;position:sticky;top:0;z-index:5;display:flex;gap:4px;overflow-x:auto;padding:8px 10px;-webkit-overflow-scrolling:touch}
+nav h1{display:none}
+nav a{white-space:nowrap;margin:0;border-left:0;border-radius:999px;padding:7px 14px}
+nav a.on{background:#fff;color:var(--side)}
+main{padding:20px 16px 48px}
+h2{font-size:22px}
+.card{padding:16px}
+}
+</style>
+
 const V=['Dashboard','My Research','Start New Research','Idea & Title','Literature Search','Article Writer','Data Analyzer','Reference Manager','Journal Finder','Quality Checker','Settings'];
 const SEC=['Title','Abstract','Keywords','Introduction','Literature Review','Method','Results','Discussion','Conclusion','Acknowledgment'];
 let D={projects:[],refs:[],set:{model:'gemini-2.5-flash',key:'',style:'APA 7'},cur:null,act:[]},view='Dashboard',data=null;
