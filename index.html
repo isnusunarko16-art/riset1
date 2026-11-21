@@ -63,7 +63,9 @@ const cd=()=>D.docs.find(d=>d.id===D.cur),wc=t=>(t||'').trim().split(/\s+/).filt
 const idb=()=>new Promise(r=>{const q=indexedDB.open('ars3',1);q.onupgradeneeded=()=>q.result.createObjectStore('k');q.onsuccess=()=>r(q.result)});
 function load(){idb().then(d=>{const g=d.transaction('k').objectStore('k').get('d');g.onsuccess=()=>{if(g.result)D=Object.assign(D,g.result);draw()}})}
 function save(){idb().then(d=>d.transaction('k','readwrite').objectStore('k').put(D,'d'))}
-const dl=(n,t,m='text/plain')=>{const x=document.createElement('a');x.href=URL.createObjectURL(t instanceof Blob?t:new Blob([t],{type:m}));x.download=n;x.click()};
+const dl=async(n,t,m='text/plain')=>{const b=t instanceof Blob?t:new Blob([t],{type:m});const f=new File([b],n,{type:b.type||m});
+try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:n});return}}catch(x){if(x.name=='AbortError')return}
+const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=n;a.target='_blank';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)};
 function go(t){D.tab=t;draw()}
 function draw(){const tabs=[['start','Mulai'],['write','Susun'],['refs','Referensi'],['export','Ekspor'],['set','Setelan']];
 $('#app').innerHTML=`<header><div class="in"><div class="br"><b>Academic Research Studio</b><span>Penyusun skripsi &amp; artikel ilmiah otomatis</span></div><div class="tabs">${tabs.map(t=>`<a class="${t[0]==D.tab?'on':''}" onclick="go('${t[0]}')">${t[1]}</a>`).join('')}</div></div></header><main>${V[D.tab]()}</main>`}
